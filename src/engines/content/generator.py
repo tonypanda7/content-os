@@ -57,30 +57,41 @@ Write a highly engaging, well-paced script using the provided Research Brief for
 You must generate around 8 to 12 scenes (roughly 2-3 minutes).
 You MUST start the first scene's narration with the exact "Chosen Hook" provided.
 
-CRITICAL INSTRUCTION FOR TTS INFLECTION:
-The "narration" field will be fed directly into an AI Text-to-Speech (TTS) engine. To make the TTS sound like a real human with depth, tone, and life, you MUST use expressive formatting:
-- Use ellipses (...) for dramatic pauses.
-- Use dashes (-) for sudden interruptions or shifts in tone.
-- CAPITALIZE specific words to force the TTS to put heavy emphasis on them.
-- Use exclamation points (!) and question marks (?) to force pitch changes.
-Write the narration exactly as a highly energetic, dramatic storyteller would speak it out loud.
+CRITICAL INSTRUCTION FOR VOICE CONSISTENCY & TONAL FLOW:
+To ensure the voice sounds like a consistent, living human throughout the entire video:
+1. "narrator_speaker": Set to "Aiden" (clear, human-sounding midrange voice with warmth).
+2. "base_voice_persona": Keep uniform across all scenes ("Warm, resonant male voice speaking at a steady, deliberate pace with grounded depth and natural pauses.").
+3. "voice_instruct" (per scene): Specify the emotional modulation for that exact scene. It MUST flow naturally from the preceding scene into the next.
+   - Grounded & human (not rushed, not robotic, not over-dramatic).
+   - Examples:
+     * "Calm, thoughtful tone filled with quiet wonder and deliberate pauses."
+     * "Inquisitive, intriguing tone delivering the mystery with natural depth."
+     * "Slightly tense, anticipatory tone, slowing down for emphasis."
+4. "narration" formatting:
+   - Use ellipses (...) for natural breathing and dramatic pauses.
+   - Use em-dashes (-) for natural conversational transitions.
+   - CAPITALIZE key emphasis words.
 
 You MUST output your response as a raw JSON object that strictly conforms to the following structure:
 {{
     "title": "A catchy title",
     "topic": "The general topic",
     "target_platform": "{target_platform}",
+    "narrator_speaker": "Aiden",
+    "base_voice_persona": "Warm, resonant male voice speaking at a steady, deliberate pace with grounded depth and natural pauses.",
     "scenes": [
         {{
             "scene_number": 1,
             "character_name": "Narrator",
+            "speaker": "Aiden",
+            "voice_instruct": "Calm, thoughtful tone filled with quiet wonder and deliberate pauses.",
             "narration": "The exact words the voiceover will say (Must start with the Chosen Hook).",
             "visual_prompt": "A detailed midjourney-style image prompt for the background visual."
         }},
         ...
     ]
 }}
-Note: For most scenes, the `character_name` should be "Narrator", but if a specific character like "Zeus" is speaking a line directly, you can change the `character_name` to "Zeus".
+Note: If a specific character like "Zeus" speaks, set character_name to "Zeus", speaker to "Uncle_Fu", and give them a distinctive voice_instruct (e.g. "Commanding, booming, and stern tone").
 Do NOT wrap the JSON in markdown code blocks. Just output the raw JSON object.
 """
 

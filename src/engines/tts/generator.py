@@ -15,36 +15,41 @@ client = OpenAI(
     api_key=os.getenv("LLM_API_KEY")
 )
 
-# DeepInfra Qwen3-TTS model
 TTS_MODEL = os.getenv("TTS_MODEL", "Qwen/Qwen3-TTS")
 
-# Native speakers from Qwen3-TTS:
-# - Ryan: Dynamic male voice with strong rhythmic drive (English)
-# - Aiden: Sunny American male voice with a clear midrange (English)
-# - Uncle_Fu: Seasoned male voice with low, mellow timbre (Chinese / deep characters)
+# Native speaker defaults:
 VOICE_MAP = {
-    "Narrator": os.getenv("NARRATOR_VOICE", "Ryan"),
+    "Narrator": os.getenv("NARRATOR_VOICE", "Aiden"),
     "Zeus": os.getenv("ZEUS_VOICE", "Uncle_Fu"),
     "Chronos": os.getenv("CHRONOS_VOICE", "Dylan"),
 }
 
-# Focused natural-language instructions following the official Qwen3-TTS spec:
-DEFAULT_INSTRUCT = (
-    "Awe-struck and dramatic storytelling tone with suspenseful pauses and intense curiosity."
+DEFAULT_BASE_PERSONA = (
+    "Warm, resonant male voice speaking at a steady, deliberate pace with grounded depth and natural pauses."
 )
 
-def generate_scene_audio(text: str, character_name: str, audio_path: Path, scene_instruct: str = None) -> None:
+def build_scene_instruct(base_persona: str, scene_instruct: str = None) -> str:
     """
-    Generates audio using DeepInfra's Qwen3-TTS with precise natural tone/emotion instructions.
+    Blends the overarching anchor persona with scene-level emotional modulation.
+    Ensures the narrator stays 100% consistent across scenes while dynamically adapting tone.
     """
-    voice = VOICE_MAP.get(character_name, VOICE_MAP["Narrator"])
-    instruct = scene_instruct or DEFAULT_INSTRUCT
-    print(f"      [Qwen3-TTS | Voice: {voice} | Instruct: \"{instruct}\"]")
+    base = base_persona or DEFAULT_BASE_PERSONA
+    if not scene_instruct:
+        return base
+    # Clean and combine smoothly
+    base = base.rstrip(".")
+    return f"{base}. Tone: {scene_instruct}"
+
+def generate_scene_audio(text: str, speaker_voice: str, audio_path: Path, instruct: str) -> None:
+    """
+    Generates audio using DeepInfra's Qwen3-TTS with consistent voice anchor and contextual instructions.
+    """
+    print(f"      [Speaker: {speaker_voice} | Instruct: \"{instruct}\"]")
     
     try:
         response = client.audio.speech.create(
             model=TTS_MODEL,
-            voice=voice,
+            voice=speaker_voice,
             input=text,
             response_format="mp3",
             extra_body={
@@ -70,16 +75,29 @@ def run_tts_pipeline(script_path: Path, output_dir: Path):
     script = VideoScript(**script_data)
     print(f"[TTS Engine]: Loaded script: '{script.title}' with {len(script.scenes)} scenes.")
     
+    base_persona = getattr(script, "base_voice_persona", DEFAULT_BASE_PERSONA)
+    narrator_voice = getattr(script, "narrator_speaker", VOICE_MAP["Narrator"])
+    
     audio_dir = output_dir / "audio"
     audio_dir.mkdir(parents=True, exist_ok=True)
     
     for scene in script.scenes:
         scene_num = scene.scene_number
         char_name = getattr(scene, "character_name", "Narrator")
-        print(f"\n[TTS Engine]: Processing Scene {scene_num}/{len(script.scenes)} ({char_name} speaking)...")
         
+        # Determine speaker
+        if char_name == "Narrator":
+            speaker = getattr(scene, "speaker", narrator_voice) or narrator_voice
+        else:
+            speaker = getattr(scene, "speaker", None) or VOICE_MAP.get(char_name, "Uncle_Fu")
+            
+        # Determine contextual instruction
+        scene_mod = getattr(scene, "voice_instruct", None)
+        full_instruct = build_scene_instruct(base_persona, scene_mod)
+        
+        print(f"\n[TTS Engine]: Processing Scene {scene_num}/{len(script.scenes)} ({char_name} speaking)...")
         audio_file = audio_dir / f"scene_{scene_num}.mp3"
-        generate_scene_audio(scene.narration, char_name, audio_file)
+        generate_scene_audio(scene.narration, speaker, audio_file, full_instruct)
         print(f"  -> Generated {audio_file.name}")
         
     updated_script_path = output_dir / "script_with_audio.json"
