@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import wave
 from pathlib import Path
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -17,14 +18,9 @@ client = OpenAI(
 
 def test_first_two_scenes():
     print("=========================================")
-    print("🎙️ Testing TTS with Expressive Punctuation")
+    print("🎙️ Generating First 2 Scenes with Qwen 3 TTS")
     print("=========================================")
     
-    narrator_id = os.getenv("NARRATOR_VOICE_ID")
-    if not narrator_id:
-        print("❌ Error: You need to run 'python src/engines/tts/voice_cloner.py' first to clone the voice and save NARRATOR_VOICE_ID to .env!")
-        return
-
     script_path = Path("data/expressive_script.json")
     with open(script_path, "r") as f:
         script_data = json.load(f)
@@ -34,24 +30,35 @@ def test_first_two_scenes():
     audio_dir = Path("data/audio_test")
     audio_dir.mkdir(parents=True, exist_ok=True)
     
-    print(f"Using cloned Voice ID: {narrator_id}\n")
+    voice = os.getenv("NARRATOR_VOICE", "Ryan")
+    print(f"Using Qwen 3 TTS (Voice: {voice})\n")
     
-    for scene in script.scenes[:2]: # ONLY THE FIRST 2 SCENES
+    for scene in script.scenes[:2]:
         print(f"--- Generating Scene {scene.scene_number} ---")
-        print(f"Narration Text: {scene.narration}\n")
+        print(f"Narration: {scene.narration}\n")
         
-        audio_file = audio_dir / f"scene_{scene.scene_number}_expressive.mp3"
+        audio_file = audio_dir / f"scene_{scene.scene_number}_qwen3.wav"
         
         try:
             response = client.audio.speech.create(
-                model="tts-1",
-                voice=narrator_id,
-                input=scene.narration
+                model="Qwen/Qwen3-TTS",
+                voice=voice,
+                input=scene.narration,
+                extra_body={
+                    "instructions": (
+                        "Speak with dramatic storytelling energy, lively inflections, "
+                        "dynamic pauses, and animated cartoon narration cadence."
+                    )
+                }
             )
             response.stream_to_file(audio_file)
-            print(f"✅ Success! Saved to {audio_file}\n")
+            
+            with wave.open(str(audio_file), "rb") as wf:
+                duration = round(wf.getnframes() / float(wf.getframerate()), 2)
+                
+            print(f"✅ Success! Saved to {audio_file} (Duration: {duration}s)\n")
         except Exception as e:
-            print(f"❌ Failed: {e}")
+            print(f"❌ Failed: {e}\n")
 
 if __name__ == "__main__":
     test_first_two_scenes()

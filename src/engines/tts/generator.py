@@ -1,7 +1,7 @@
 import os
 import sys
 import json
-import asyncio
+import wave
 from pathlib import Path
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -12,51 +12,68 @@ from src.models.content import VideoScript
 
 load_dotenv()
 
-# Initialize OpenAI client with DeepInfra endpoint
+# Initialize OpenAI client pointing to DeepInfra
 client = OpenAI(
     base_url="https://api.deepinfra.com/v1/openai",
     api_key=os.getenv("LLM_API_KEY")
 )
 
-# You will map character names from the script to their respective DeepInfra voice IDs here.
-# To get these IDs, use the curl command: curl -X POST "https://api.deepinfra.com/v1/voices/add" ...
+# DeepInfra Qwen3-TTS models:
+# - "Qwen/Qwen3-TTS" (Preset voices + instructions + cloning)
+# - "Qwen/Qwen3-TTS-VoiceDesign" (Natural language voice description)
+TTS_MODEL = os.getenv("TTS_MODEL", "Qwen/Qwen3-TTS")
+
+# Voices available: Ryan, Eric, Aiden, Dylan, Uncle_Fu, Vivian, Serena, Ono_Anna, Sohee
 VOICE_MAP = {
-    "Narrator": os.getenv("NARRATOR_VOICE_ID", "default_narrator_voice_id_here"),
-    "Zeus": os.getenv("ZEUS_VOICE_ID", "default_zeus_voice_id_here"),
-    # Add more characters as needed
+    "Narrator": os.getenv("NARRATOR_VOICE", "Ryan"),
+    "Zeus": os.getenv("ZEUS_VOICE", "Uncle_Fu"),
+    "Chronos": os.getenv("CHRONOS_VOICE", "Dylan"),
 }
+
+STYLE_INSTRUCTIONS = (
+    "Speak with dramatic storytelling energy, lively inflections, dynamic pauses, "
+    "and expressive animated cartoon narration cadence."
+)
+
+def get_audio_duration_seconds(file_path: Path) -> float:
+    """Calculates exact duration of WAV file using the wave module."""
+    try:
+        with wave.open(str(file_path), "rb") as wf:
+            frames = wf.getnframes()
+            rate = wf.getframerate()
+            return round(frames / float(rate), 2)
+    except Exception as e:
+        print(f"Warning: Could not compute audio duration: {e}")
+        return 0.0
 
 def generate_scene_audio(text: str, character_name: str, audio_path: Path) -> float:
     """
-    Generates audio using DeepInfra's tts-1 model.
+    Generates audio using DeepInfra's Qwen3-TTS model with natural style instructions.
     """
-    voice_id = VOICE_MAP.get(character_name, VOICE_MAP["Narrator"])
-    
-    print(f"      [Requesting TTS for {character_name} using voice: {voice_id}]")
+    voice = VOICE_MAP.get(character_name, VOICE_MAP["Narrator"])
+    print(f"      [Qwen3-TTS ({TTS_MODEL}) for {character_name} | Voice: {voice}]")
     
     try:
         response = client.audio.speech.create(
-            model="tts-1",
-            voice=voice_id,
-            input=text
+            model=TTS_MODEL,
+            voice=voice,
+            input=text,
+            extra_body={
+                "instructions": STYLE_INSTRUCTIONS
+            }
         )
         
-        # Save the audio file
         response.stream_to_file(audio_path)
-        
-        # Note: Standard OpenAI TTS endpoints do not return word-level timestamps natively in the same payload.
-        # DeepInfra XTTS may require a different endpoint for word boundaries if needed.
-        # For now, we estimate duration based on file size or fallback to length.
-        # An exact duration calculation will require loading the mp3 (e.g. using mutagen).
-        return len(text) / 15.0 # Rough estimate: 15 characters per second
+        duration = get_audio_duration_seconds(audio_path)
+        return duration
         
     except Exception as e:
-        print(f"      [Error generating audio]: {e}")
+        print(f"      [Error generating audio with Qwen3-TTS]: {e}")
         return 0.0
 
 def run_tts_pipeline(script_path: Path, output_dir: Path):
     print("=========================================")
-    print("🎙️ Welcome to the DeepInfra TTS Engine")
+    print(f"🎙️ Qwen 3 TTS Engine ({TTS_MODEL})")
     print("=========================================")
     
     if not script_path.exists():
@@ -79,24 +96,22 @@ def run_tts_pipeline(script_path: Path, output_dir: Path):
         char_name = getattr(scene, "character_name", "Narrator")
         print(f"\n[TTS Engine]: Processing Scene {scene_num}/{len(script.scenes)} ({char_name} speaking)...")
         
-        audio_file = audio_dir / f"scene_{scene_num}.mp3"
-        
-        # Generate audio using DeepInfra
+        audio_file = audio_dir / f"scene_{scene_num}.wav"
         duration = generate_scene_audio(scene.narration, char_name, audio_file)
-        scene.estimated_duration_seconds = round(duration, 2)
+        scene.estimated_duration_seconds = duration
         total_duration += duration
         
-        print(f"  -> Generated {audio_file.name}")
+        print(f"  -> Generated {audio_file.name} (Duration: {duration}s)")
         
-    print(f"\n[TTS Engine]: All audio generated! Total video duration estimate: {round(total_duration, 2)} seconds.")
+    print(f"\n[TTS Engine]: All audio generated! Total video duration: {round(total_duration, 2)} seconds.")
     
     updated_script_path = output_dir / "script_with_audio.json"
     with open(updated_script_path, "w") as f:
         f.write(script.model_dump_json(indent=4))
         
-    print(f"[TTS Engine]: Updated JSON with durations saved to {updated_script_path}")
+    print(f"[TTS Engine]: Updated JSON with exact durations saved to {updated_script_path}")
 
 if __name__ == "__main__":
-    script_file = Path("data/latest_script.json")
+    script_file = Path("data/expressive_script.json")
     out_dir = Path("data")
     run_tts_pipeline(script_file, out_dir)
