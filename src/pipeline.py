@@ -35,7 +35,7 @@ def run_pipeline(
     storyboard_path = data_dir / "storyboard.json"
     audio_dir = data_dir / "audio"
     images_dir = data_dir / "images"
-    sprite_path = data_dir / "character_sprite.png"
+    sprites_dir = data_dir / "sprites"
     output_dir = data_dir / "output"
     output_dir.mkdir(parents=True, exist_ok=True)
     final_video = output_dir / "fermi_paradox_1min.mp4"
@@ -81,7 +81,7 @@ def run_pipeline(
         storyboard_path=storyboard_path,
         audio_dir=audio_dir,
         images_dir=images_dir,
-        sprite_path=sprite_path,
+        sprites_dir=sprites_dir,
         output_path=final_video,
         scene_limit=scene_limit
     )

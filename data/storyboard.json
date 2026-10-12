@@ -1,9 +1,9 @@
 {
     "title": "The Cosmic Silence: Unraveling the Fermi Paradox",
     "topic": "Fermi Paradox",
-    "art_style_prompt": "Clean 2D cel-shaded comic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, hand-drawn cartoon background art",
-    "narrator_concept": "Chibi stickman astronomer with an expressive skeleton head, wearing a tweed coat and brass telescope goggles",
-    "typography_theme": "Heavy bold comic sans-serif font, vibrant yellow fill, 4px solid black border with subtle drop shadow",
+    "art_style_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic",
+    "narrator_concept": "Chibi astronomer skeleton professor wearing tweed jacket and bowtie",
+    "typography_theme": "Heavy bold comic sans-serif font, vibrant yellow fill, 4px solid black border",
     "scenes": [
         {
             "scene_number": 1,
@@ -13,37 +13,43 @@
                 {
                     "beat_index": 1,
                     "start_time": 0.0,
-                    "end_time": 7.5,
-                    "duration": 7.5,
+                    "end_time": 8.0,
+                    "duration": 8.0,
                     "shot_type": "WIDE_NARRATOR_LEFT",
-                    "narrator_pose": "AWE_HANDS_UP",
+                    "narrator_pose": "EXPLAINING",
                     "narrator_position": "bottom-left",
-                    "background_prompt": "Vast starry night sky with glowing Milky Way galaxy arching across space, retro observatory dome in distance, 2D comic art",
-                    "text_overlay": null,
+                    "infographic_concept": "A massive starfield with a billion stars, each labeled with a unique identifier",
+                    "graphic_annotation": "ARROW_POINTING",
+                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, showing a sprawling starfield with various sized stars and a subtle grid pattern in the background",
+                    "text_overlay": "A BILLION STARS",
                     "camera_motion": "SLOW_ZOOM_IN"
                 },
                 {
                     "beat_index": 2,
-                    "start_time": 7.5,
-                    "end_time": 15.68,
-                    "duration": 8.18,
-                    "shot_type": "CLOSEUP_NARRATOR_CENTER",
-                    "narrator_pose": "EXPLAINING",
-                    "narrator_position": "center",
-                    "background_prompt": "Blurred starry night sky with subtle texture, 2D comic art",
-                    "text_overlay": "BILLION STARS",
+                    "start_time": 8.0,
+                    "end_time": 17.0,
+                    "duration": 9.0,
+                    "shot_type": "FULL_CINEMATIC_NO_NARRATOR",
+                    "narrator_pose": "HIDDEN",
+                    "narrator_position": null,
+                    "infographic_concept": "A scaled illustration of the Milky Way galaxy, with a range of 100-400 billion stars, and a comparison to the number of grains of sand on Earth",
+                    "graphic_annotation": null,
+                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, depicting the Milky Way galaxy as a massive, glowing disk with various celestial objects and a scale bar comparing it to the number of grains of sand on Earth",
+                    "text_overlay": "MILKY WAY GALAXY",
                     "camera_motion": "PAN_LEFT_TO_RIGHT"
                 },
                 {
                     "beat_index": 3,
-                    "start_time": 15.68,
+                    "start_time": 17.0,
                     "end_time": 23.68,
-                    "duration": 8.0,
-                    "shot_type": "FULL_CINEMATIC_NO_NARRATOR",
-                    "narrator_pose": null,
-                    "narrator_position": null,
-                    "background_prompt": "Desolate, empty space with a few distant stars, 2D comic art",
-                    "text_overlay": "COSMIC SILENCE",
+                    "duration": 6.68,
+                    "shot_type": "SPLIT_SCREEN_DIAGRAM",
+                    "narrator_pose": "SHRUGGING_QUESTIONING",
+                    "narrator_position": "bottom-right",
+                    "infographic_concept": "A split-screen comparison of the expected presence of extraterrestrial life versus the current lack of evidence, with a question mark symbol",
+                    "graphic_annotation": "QUESTION_MARKS",
+                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, showing a split-screen diagram with a 'expected life' panel filled with alien silhouettes and a 'current evidence' panel with a large question mark and a red X symbol",
+                    "text_overlay": "WHERE IS EVERYBODY?",
                     "camera_motion": "SLOW_ZOOM_OUT"
                 }
             ]
@@ -56,38 +62,44 @@
                 {
                     "beat_index": 1,
                     "start_time": 0.0,
-                    "end_time": 5.96,
-                    "duration": 5.96,
-                    "shot_type": "WIDE_NARRATOR_RIGHT",
+                    "end_time": 5.33,
+                    "duration": 5.33,
+                    "shot_type": "WIDE_NARRATOR_LEFT",
                     "narrator_pose": "EXPLAINING",
-                    "narrator_position": "bottom-right",
-                    "background_prompt": "Retro-style illustration of Enrico Fermi, 2D comic art",
-                    "text_overlay": "FERMI PARADOX",
-                    "camera_motion": "PUNCH_IN"
-                },
-                {
-                    "beat_index": 2,
-                    "start_time": 5.96,
-                    "end_time": 11.44,
-                    "duration": 5.48,
-                    "shot_type": "CLOSEUP_NARRATOR_CENTER",
-                    "narrator_pose": "SHRUGGING_QUESTIONING",
-                    "narrator_position": "center",
-                    "background_prompt": "Blurred image of a spaceship or alien technology, 2D comic art",
-                    "text_overlay": null,
+                    "narrator_position": "bottom-left",
+                    "infographic_concept": "A diagram showing the universe with various planets and galaxies, highlighting the potential for intelligent life",
+                    "graphic_annotation": "ARROW_POINTING",
+                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, of the universe with planets and galaxies labeled, including a scale bar and a red arrow pointing to a specific galaxy",
+                    "text_overlay": "INTELLIGENT LIFE",
                     "camera_motion": "SLOW_ZOOM_IN"
                 },
                 {
-                    "beat_index": 3,
-                    "start_time": 11.44,
-                    "end_time": 16.96,
-                    "duration": 5.52,
+                    "beat_index": 2,
+                    "start_time": 5.33,
+                    "end_time": 12.01,
+                    "duration": 6.68,
                     "shot_type": "FULL_CINEMATIC_NO_NARRATOR",
-                    "narrator_pose": null,
+                    "narrator_pose": "HIDDEN",
                     "narrator_position": null,
-                    "background_prompt": "Empty, silent space with a few distant stars, 2D comic art",
-                    "text_overlay": "SILENT UNIVERSE",
-                    "camera_motion": "STATIC"
+                    "infographic_concept": "A timeline of the universe's history, highlighting the emergence of intelligent life and the subsequent silence",
+                    "graphic_annotation": "QUESTION_MARKS",
+                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, of a timeline with key events labeled, including the emergence of intelligent life and the Fermi Paradox",
+                    "text_overlay": "THE FERMI PARADOX",
+                    "camera_motion": "PAN_LEFT_TO_RIGHT"
+                },
+                {
+                    "beat_index": 3,
+                    "start_time": 12.01,
+                    "end_time": 16.96,
+                    "duration": 4.95,
+                    "shot_type": "CLOSEUP_NARRATOR_CENTER",
+                    "narrator_pose": "SHRUGGING_QUESTIONING",
+                    "narrator_position": "center",
+                    "infographic_concept": "A narrative comic scene showing Enrico Fermi asking the question, with a thought bubble containing a galaxy and a question mark",
+                    "graphic_annotation": "RED_CROSSOUT",
+                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, of Enrico Fermi with a thought bubble, containing a galaxy and a question mark",
+                    "text_overlay": "WHERE IS EVERYBODY?",
+                    "camera_motion": "PUNCH_IN"
                 }
             ]
         },
@@ -104,248 +116,39 @@
                     "shot_type": "WIDE_NARRATOR_LEFT",
                     "narrator_pose": "EXPLAINING",
                     "narrator_position": "bottom-left",
-                    "background_prompt": "Illustration of a filter or barrier, 2D comic art",
+                    "infographic_concept": "A diagram illustrating the concept of the Great Filter, with a series of barriers or filters that prevent civilizations from becoming interstellar",
+                    "graphic_annotation": "RED_CROSSOUT",
+                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, showing a large filter icon with a red X marked through it, and a scale bar with 'Civilization' on one end and 'Interstellar' on the other",
                     "text_overlay": "GREAT FILTER",
-                    "camera_motion": "PAN_LEFT_TO_RIGHT"
+                    "camera_motion": "SLOW_ZOOM_IN"
                 },
                 {
                     "beat_index": 2,
                     "start_time": 4.8,
-                    "end_time": 9.6,
-                    "duration": 4.8,
-                    "shot_type": "CLOSEUP_NARRATOR_CENTER",
-                    "narrator_pose": "SHRUGGING_QUESTIONING",
-                    "narrator_position": "center",
-                    "background_prompt": "Blurred image of a planet or civilization, 2D comic art",
-                    "text_overlay": null,
-                    "camera_motion": "SLOW_ZOOM_IN"
-                },
-                {
-                    "beat_index": 3,
-                    "start_time": 9.6,
-                    "end_time": 14.4,
-                    "duration": 4.8,
-                    "shot_type": "FULL_CINEMATIC_NO_NARRATOR",
-                    "narrator_pose": null,
-                    "narrator_position": null,
-                    "background_prompt": "Desolate, barren landscape, 2D comic art",
-                    "text_overlay": "EXTINCTION",
-                    "camera_motion": "SLOW_ZOOM_OUT"
-                }
-            ]
-        },
-        {
-            "scene_number": 4,
-            "audio_file": "scene_4.mp3",
-            "duration": 14.32,
-            "beats": [
-                {
-                    "beat_index": 1,
-                    "start_time": 0.0,
-                    "end_time": 4.72,
-                    "duration": 4.72,
-                    "shot_type": "WIDE_NARRATOR_RIGHT",
-                    "narrator_pose": "EXPLAINING",
-                    "narrator_position": "bottom-right",
-                    "background_prompt": "Illustration of a zoo or nature reserve, 2D comic art",
-                    "text_overlay": "ZOO HYPOTHESIS",
-                    "camera_motion": "PUNCH_IN"
-                },
-                {
-                    "beat_index": 2,
-                    "start_time": 4.72,
-                    "end_time": 9.28,
-                    "duration": 4.56,
-                    "shot_type": "CLOSEUP_NARRATOR_CENTER",
-                    "narrator_pose": "POINTING",
-                    "narrator_position": "center",
-                    "background_prompt": "Blurred image of a planet or civilization, 2D comic art",
-                    "text_overlay": null,
-                    "camera_motion": "SLOW_ZOOM_IN"
-                },
-                {
-                    "beat_index": 3,
-                    "start_time": 9.28,
-                    "end_time": 14.32,
-                    "duration": 5.04,
-                    "shot_type": "FULL_CINEMATIC_NO_NARRATOR",
-                    "narrator_pose": null,
-                    "narrator_position": null,
-                    "background_prompt": "Empty, silent space with a few distant stars, 2D comic art",
-                    "text_overlay": "COSMIC CURIOSITY",
-                    "camera_motion": "STATIC"
-                }
-            ]
-        },
-        {
-            "scene_number": 5,
-            "audio_file": "scene_5.mp3",
-            "duration": 15.76,
-            "beats": [
-                {
-                    "beat_index": 1,
-                    "start_time": 0.0,
-                    "end_time": 5.28,
-                    "duration": 5.28,
-                    "shot_type": "WIDE_NARRATOR_LEFT",
-                    "narrator_pose": "EXPLAINING",
-                    "narrator_position": "bottom-left",
-                    "background_prompt": "Illustration of a timeline or cosmic calendar, 2D comic art",
-                    "text_overlay": "COSMIC EVOLUTION",
-                    "camera_motion": "PAN_LEFT_TO_RIGHT"
-                },
-                {
-                    "beat_index": 2,
-                    "start_time": 5.28,
-                    "end_time": 10.48,
-                    "duration": 5.2,
-                    "shot_type": "CLOSEUP_NARRATOR_CENTER",
-                    "narrator_pose": "AWE_HANDS_UP",
-                    "narrator_position": "center",
-                    "background_prompt": "Blurred image of a planet or civilization, 2D comic art",
-                    "text_overlay": null,
-                    "camera_motion": "SLOW_ZOOM_IN"
-                },
-                {
-                    "beat_index": 3,
-                    "start_time": 10.48,
-                    "end_time": 15.76,
-                    "duration": 5.28,
-                    "shot_type": "FULL_CINEMATIC_NO_NARRATOR",
-                    "narrator_pose": null,
-                    "narrator_position": null,
-                    "background_prompt": "Vast, starry night sky with glowing Milky Way galaxy, 2D comic art",
-                    "text_overlay": "COSMIC JOURNEY",
-                    "camera_motion": "SLOW_ZOOM_OUT"
-                }
-            ]
-        },
-        {
-            "scene_number": 6,
-            "audio_file": "scene_6.mp3",
-            "duration": 17.44,
-            "beats": [
-                {
-                    "beat_index": 1,
-                    "start_time": 0.0,
-                    "end_time": 5.76,
-                    "duration": 5.76,
-                    "shot_type": "WIDE_NARRATOR_RIGHT",
-                    "narrator_pose": "EXPLAINING",
-                    "narrator_position": "bottom-right",
-                    "background_prompt": "Illustration of a question mark or puzzle piece, 2D comic art",
-                    "text_overlay": "FERMI PARADOX",
-                    "camera_motion": "PUNCH_IN"
-                },
-                {
-                    "beat_index": 2,
-                    "start_time": 5.76,
-                    "end_time": 11.12,
-                    "duration": 5.36,
-                    "shot_type": "CLOSEUP_NARRATOR_CENTER",
-                    "narrator_pose": "SHRUGGING_QUESTIONING",
-                    "narrator_position": "center",
-                    "background_prompt": "Blurred image of a planet or civilization, 2D comic art",
-                    "text_overlay": null,
-                    "camera_motion": "SLOW_ZOOM_IN"
-                },
-                {
-                    "beat_index": 3,
-                    "start_time": 11.12,
-                    "end_time": 17.44,
-                    "duration": 6.32,
-                    "shot_type": "FULL_CINEMATIC_NO_NARRATOR",
-                    "narrator_pose": null,
-                    "narrator_position": null,
-                    "background_prompt": "Empty, silent space with a few distant stars, 2D comic art",
-                    "text_overlay": "DEAFENING SILENCE",
-                    "camera_motion": "STATIC"
-                }
-            ]
-        },
-        {
-            "scene_number": 7,
-            "audio_file": "scene_7.mp3",
-            "duration": 18.88,
-            "beats": [
-                {
-                    "beat_index": 1,
-                    "start_time": 0.0,
-                    "end_time": 6.24,
-                    "duration": 6.24,
-                    "shot_type": "WIDE_NARRATOR_LEFT",
-                    "narrator_pose": "EXPLAINING",
-                    "narrator_position": "bottom-left",
-                    "background_prompt": "Illustration of a spaceship or telescope, 2D comic art",
-                    "text_overlay": "SEARCH FOR LIFE",
-                    "camera_motion": "PAN_LEFT_TO_RIGHT"
-                },
-                {
-                    "beat_index": 2,
-                    "start_time": 6.24,
-                    "end_time": 12.48,
-                    "duration": 6.24,
-                    "shot_type": "CLOSEUP_NARRATOR_CENTER",
-                    "narrator_pose": "AWE_HANDS_UP",
-                    "narrator_position": "center",
-                    "background_prompt": "Blurred image of a planet or civilization, 2D comic art",
-                    "text_overlay": null,
-                    "camera_motion": "SLOW_ZOOM_IN"
-                },
-                {
-                    "beat_index": 3,
-                    "start_time": 12.48,
-                    "end_time": 18.88,
+                    "end_time": 11.2,
                     "duration": 6.4,
                     "shot_type": "FULL_CINEMATIC_NO_NARRATOR",
-                    "narrator_pose": null,
+                    "narrator_pose": "HIDDEN",
                     "narrator_position": null,
-                    "background_prompt": "Vast, starry night sky with glowing Milky Way galaxy, 2D comic art",
-                    "text_overlay": "COSMIC QUESTIONS",
-                    "camera_motion": "SLOW_ZOOM_OUT"
-                }
-            ]
-        },
-        {
-            "scene_number": 8,
-            "audio_file": "scene_8.mp3",
-            "duration": 16.56,
-            "beats": [
-                {
-                    "beat_index": 1,
-                    "start_time": 0.0,
-                    "end_time": 5.44,
-                    "duration": 5.44,
-                    "shot_type": "WIDE_NARRATOR_RIGHT",
-                    "narrator_pose": "EXPLAINING",
-                    "narrator_position": "bottom-right",
-                    "background_prompt": "Illustration of a discovery or breakthrough, 2D comic art",
-                    "text_overlay": "NEW DISCOVERIES",
-                    "camera_motion": "PUNCH_IN"
-                },
-                {
-                    "beat_index": 2,
-                    "start_time": 5.44,
-                    "end_time": 10.88,
-                    "duration": 5.44,
-                    "shot_type": "CLOSEUP_NARRATOR_CENTER",
-                    "narrator_pose": "SHRUGGING_QUESTIONING",
-                    "narrator_position": "center",
-                    "background_prompt": "Blurred image of a planet or civilization, 2D comic art",
-                    "text_overlay": null,
-                    "camera_motion": "SLOW_ZOOM_IN"
+                    "infographic_concept": "A timeline showing the progression of civilizations, with a question mark at the point where the Great Filter may be located",
+                    "graphic_annotation": "QUESTION_MARKS",
+                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, showing a long timeline with various civilization icons and a large question mark at a midpoint, labeled 'Have we passed it?'",
+                    "text_overlay": "HAVE WE PASSED IT?",
+                    "camera_motion": "PAN_LEFT_TO_RIGHT"
                 },
                 {
                     "beat_index": 3,
-                    "start_time": 10.88,
-                    "end_time": 16.56,
-                    "duration": 5.68,
-                    "shot_type": "FULL_CINEMATIC_NO_NARRATOR",
-                    "narrator_pose": null,
-                    "narrator_position": null,
-                    "background_prompt": "Empty, silent space with a few distant stars, 2D comic art",
-                    "text_overlay": "COSMIC ADVENTURE",
-                    "camera_motion": "STATIC"
+                    "start_time": 11.2,
+                    "end_time": 14.4,
+                    "duration": 3.2,
+                    "shot_type": "CLOSEUP_NARRATOR_CENTER",
+                    "narrator_pose": "SHRUGGING_QUESTIONING",
+                    "narrator_position": "center",
+                    "infographic_concept": "A narrative comic scene showing a character looking concerned and unsure about the Great Filter",
+                    "graphic_annotation": null,
+                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, showing a close-up of a character with a worried expression, looking up at a large filter icon in the background",
+                    "text_overlay": "WILL WE SURVIVE?",
+                    "camera_motion": "PUNCH_IN"
                 }
             ]
         }

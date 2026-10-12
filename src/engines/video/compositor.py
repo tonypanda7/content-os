@@ -112,10 +112,49 @@ def render_text_badge(canvas_w: int, canvas_h: int, text: str, progress_sec: flo
 
     return badge
 
+def render_graphic_annotation(canvas_w: int, canvas_h: int, annotation_type: str, progress_sec: float) -> Image.Image:
+    """
+    Renders on-screen comic annotations like RED_CROSSOUT ('X'), QUESTION_MARKS ('???'), or ARROW_POINTING.
+    """
+    if not annotation_type:
+        return None
+
+    overlay = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay)
+
+    # Animate entrance pop
+    scale = min(1.0, progress_sec / 0.25) if progress_sec < 0.25 else 1.0
+
+    if annotation_type == "RED_CROSSOUT":
+        # Big dramatic red X over right-center area
+        cx, cy, sz = 850, 340, int(150 * scale)
+        if sz > 10:
+            # Drop shadow
+            draw.line([(cx - sz + 4, cy - sz + 4), (cx + sz + 4, cy + sz + 4)], fill=(0, 0, 0, 180), width=16)
+            draw.line([(cx - sz + 4, cy + sz + 4), (cx + sz + 4, cy - sz + 4)], fill=(0, 0, 0, 180), width=16)
+            # Red stroke
+            draw.line([(cx - sz, cy - sz), (cx + sz, cy + sz)], fill=(225, 30, 30, 245), width=14)
+            draw.line([(cx - sz, cy + sz), (cx + sz, cy - sz)], fill=(225, 30, 30, 245), width=14)
+
+    elif annotation_type == "QUESTION_MARKS":
+        font_size = max(20, int(64 * scale))
+        font = get_font(font_size)
+        # Floating ??? near narrator
+        bob = int(math.sin(progress_sec * 4.0) * 8)
+        draw.text((260, 150 + bob), "???", font=font, fill="#FFD700", stroke_width=5, stroke_fill="black")
+
+    elif annotation_type == "ARROW_POINTING":
+        # Comic yellow arrow pointing towards diagram center
+        arrow_x = int(500 + math.sin(progress_sec * 5.0) * 12)
+        arrow_y = 300
+        font = get_font(max(20, int(54 * scale)))
+        draw.text((arrow_x, arrow_y), "➔", font=font, fill="#FFD700", stroke_width=4, stroke_fill="black")
+
+    return overlay
+
 def apply_camera_motion(bg: Image.Image, motion: str, progress: float) -> Image.Image:
     """
     Applies Ken Burns zoom and pan effects onto a 1280x720 canvas.
-    progress is between 0.0 and 1.0.
     """
     p = max(0.0, min(1.0, progress))
 
@@ -154,7 +193,6 @@ def apply_camera_motion(bg: Image.Image, motion: str, progress: float) -> Image.
         return scaled.crop((crop_x, crop_y, crop_x + WIDTH, crop_y + HEIGHT))
 
     elif motion == "PUNCH_IN":
-        # Dramatic punch zoom
         z = 1.08 + 0.16 * (p ** 0.65)
         w, h = int(WIDTH * z), int(HEIGHT * z)
         scaled = bg.resize((w, h), Image.Resampling.BILINEAR)
@@ -162,7 +200,7 @@ def apply_camera_motion(bg: Image.Image, motion: str, progress: float) -> Image.
         crop_y = (h - HEIGHT) // 2
         return scaled.crop((crop_x, crop_y, crop_x + WIDTH, crop_y + HEIGHT))
 
-    else: # STATIC or fallback
+    else: # STATIC
         z = 1.05
         w, h = int(WIDTH * z), int(HEIGHT * z)
         scaled = bg.resize((w, h), Image.Resampling.BILINEAR)
@@ -170,17 +208,45 @@ def apply_camera_motion(bg: Image.Image, motion: str, progress: float) -> Image.
         crop_y = (h - HEIGHT) // 2
         return scaled.crop((crop_x, crop_y, crop_x + WIDTH, crop_y + HEIGHT))
 
+def load_pose_sprite(sprites_dir: Path, pose_name: str) -> Image.Image:
+    """
+    Loads the appropriate character sprite based on the directed pose.
+    Falls back gracefully if a specific pose sprite is not yet generated.
+    """
+    pose_map = {
+        "POINTING": "narrator_pointing.png",
+        "SHRUGGING": "narrator_shrugging.png",
+        "SHRUGGING_QUESTIONING": "narrator_shrugging.png",
+        "THINKING": "narrator_thinking.png",
+        "EXPLAINING": "narrator_explaining.png",
+        "AWE_HANDS_UP": "narrator_pointing.png"
+    }
+    filename = pose_map.get(pose_name, "narrator_explaining.png")
+    path = sprites_dir / filename
+    if path.exists():
+        img = Image.open(path).convert("RGBA")
+        bbox = img.getbbox()
+        return img.crop(bbox) if bbox else img
+
+    # Fallback
+    fallback = sprites_dir / "narrator_explaining.png"
+    if fallback.exists():
+        img = Image.open(fallback).convert("RGBA")
+        bbox = img.getbbox()
+        return img.crop(bbox) if bbox else img
+    return None
+
 def render_scene(
     scene_dict: dict,
     images_dir: Path,
     audio_path: Path,
-    sprite_path: Path,
+    sprites_dir: Path,
     output_mp4: Path,
     fps: int = DEFAULT_FPS
 ) -> bool:
     """
-    Renders a complete scene with multiple visual beats, animated narrator sprite,
-    Ken Burns camera motion, pop-up typography, and muxes with the scene audio.
+    Renders a complete scene with multiple visual beats, dynamic pose swaps,
+    talking body pulse, Ken Burns camera motion, infographic annotations, and pop-up typography.
     """
     scene_num = scene_dict.get("scene_number", 1)
     duration = scene_dict.get("duration", 15.0)
@@ -203,17 +269,8 @@ def render_scene(
             accumulated += frames
         beat_frames_list.append(frames)
 
-    # Load narrator sprite if available
-    sprite = None
-    if sprite_path.exists():
-        sprite = Image.open(sprite_path).convert("RGBA")
-        bbox = sprite.getbbox()
-        if bbox:
-            sprite = sprite.crop(bbox)
-
     print(f"\n🎬 Rendering Scene {scene_num} ({duration}s, {total_frames} frames @ {fps}fps across {len(beats)} beats)...")
 
-    # Launch FFmpeg process to pipe raw frames
     ffmpeg_cmd = [
         "ffmpeg", "-y",
         "-f", "rawvideo",
@@ -246,13 +303,14 @@ def render_scene(
         beat_num = beat.get("beat_index", b_idx + 1)
         camera_motion = beat.get("camera_motion", "STATIC")
         shot_type = beat.get("shot_type", "WIDE_NARRATOR_LEFT")
+        pose_name = beat.get("narrator_pose", "EXPLAINING")
         narrator_pos = beat.get("narrator_position", "bottom-left")
         text_overlay = beat.get("text_overlay")
+        graphic_ann = beat.get("graphic_annotation")
 
         # Load background image
         bg_path = images_dir / f"scene_{scene_num}_beat_{beat_num}.jpg"
         if not bg_path.exists():
-            # Fallback to beat 1 if specific beat image is missing
             fallback = images_dir / f"scene_{scene_num}_beat_1.jpg"
             bg_path = fallback if fallback.exists() else None
 
@@ -261,23 +319,24 @@ def render_scene(
         else:
             bg_img = Image.new("RGBA", (WIDTH, HEIGHT), (20, 24, 35, 255))
 
-        # Prepare narrator sprite for this shot type
+        # Dynamic pose loading from pose library
         has_narrator = (
-            sprite is not None and
             shot_type != "FULL_CINEMATIC_NO_NARRATOR" and
-            narrator_pos is not None
+            narrator_pos is not None and
+            pose_name != "HIDDEN"
         )
 
+        sprite = load_pose_sprite(sprites_dir, pose_name) if has_narrator else None
         scaled_sprite = None
         base_sprite_x = 0
         base_sprite_y = 0
 
-        if has_narrator:
+        if sprite and has_narrator:
             # Determine size by shot type
             if "CLOSEUP" in shot_type or narrator_pos == "center":
                 target_h = 510
             else:
-                target_h = 385
+                target_h = 390
 
             target_w = int(sprite.width * (target_h / sprite.height))
             scaled_sprite = sprite.resize((target_w, target_h), Image.Resampling.BILINEAR)
@@ -293,7 +352,7 @@ def render_scene(
                 base_sprite_x = 60
                 base_sprite_y = HEIGHT - target_h
 
-        print(f"   Beat {beat_num}/{len(beats)}: {num_frames} frames | Cam: {camera_motion} | Shot: {shot_type} | Overlay: {text_overlay or 'None'}")
+        print(f"   Beat {beat_num}/{len(beats)}: {num_frames} frames | Pose: {pose_name} | Cam: {camera_motion} | Annotation: {graphic_ann or 'None'} | Overlay: {text_overlay or 'None'}")
 
         for f_idx in range(num_frames):
             progress_in_beat = f_idx / float(num_frames) if num_frames > 1 else 0.0
@@ -303,19 +362,25 @@ def render_scene(
             # 1. Background layer with camera motion
             frame = apply_camera_motion(bg_img, camera_motion, progress_in_beat)
 
-            # 2. Anchored Narrator sprite layer with subtle breathing/bobbing
+            # 2. Anchored Narrator sprite layer with breathing & talking pulse
             if has_narrator and scaled_sprite:
-                bob_y = int(math.sin(scene_sec * 3.8) * 3.5)
-                cur_y = base_sprite_y + bob_y
+                # Talking pulse / subtle body bounce
+                pulse_y = int(math.sin(scene_sec * 12.0) * 3.0)
+                cur_y = base_sprite_y + pulse_y
                 frame.paste(scaled_sprite, (base_sprite_x, cur_y), scaled_sprite)
 
-            # 3. Typography Title Card overlay
+            # 3. Graphic Annotation layer (Red 'X', arrows, ???)
+            if graphic_ann:
+                ann_badge = render_graphic_annotation(WIDTH, HEIGHT, graphic_ann, beat_sec)
+                if ann_badge:
+                    frame = Image.alpha_composite(frame, ann_badge)
+
+            # 4. Typography Title Card overlay
             if text_overlay:
                 badge = render_text_badge(WIDTH, HEIGHT, text_overlay, beat_sec, num_frames / float(fps))
                 if badge:
                     frame = Image.alpha_composite(frame, badge)
 
-            # Write raw bytes to FFmpeg pipe
             proc.stdin.write(frame.tobytes())
 
         elapsed_scene_sec += num_frames / float(fps)
@@ -332,9 +397,6 @@ def render_scene(
     return True
 
 def concatenate_scenes(scene_mp4s: list[Path], output_video: Path) -> bool:
-    """
-    Concatenates multiple scene MP4 files into the final YouTube video.
-    """
     print(f"\n📦 Merging {len(scene_mp4s)} scene segments into final video...")
     output_video.parent.mkdir(parents=True, exist_ok=True)
 
@@ -356,7 +418,6 @@ def concatenate_scenes(scene_mp4s: list[Path], output_video: Path) -> bool:
     list_file.unlink(missing_ok=True)
 
     if result.returncode != 0:
-        print(f"⚠️ Direct concat copy failed, falling back to filter concat: {result.stderr.decode()[:200]}")
         inputs = []
         for mp4 in scene_mp4s:
             inputs.extend(["-i", str(mp4)])
@@ -384,16 +445,12 @@ def assemble_video(
     storyboard_path: Path,
     audio_dir: Path,
     images_dir: Path,
-    sprite_path: Path,
+    sprites_dir: Path,
     output_path: Path,
     scene_limit: int = 3
 ) -> bool:
-    """
-    Main entry point for Timeline Compositor Engine.
-    Processes scenes up to scene_limit (default 3 = ~1 minute demo).
-    """
     print("=========================================")
-    print("🎞️ Timeline Compositor Engine")
+    print("🎞️ Timeline Compositor Engine (Interactive Multi-Pose Edition)")
     print("=========================================")
 
     if not storyboard_path.exists():
@@ -420,7 +477,7 @@ def assemble_video(
             scene_dict=s,
             images_dir=images_dir,
             audio_path=audio_file,
-            sprite_path=sprite_path,
+            sprites_dir=sprites_dir,
             output_mp4=scene_mp4,
             fps=DEFAULT_FPS
         )
@@ -431,7 +488,6 @@ def assemble_video(
 
         rendered_scenes.append(scene_mp4)
 
-    # Concatenate all rendered scenes
     success = concatenate_scenes(rendered_scenes, output_path)
     return success
 
@@ -439,7 +495,7 @@ if __name__ == "__main__":
     storyboard = Path("data/storyboard.json")
     audio_dir = Path("data/audio")
     images_dir = Path("data/images")
-    sprite = Path("data/character_sprite.png")
+    sprites = Path("data/sprites")
     final_output = Path("data/output/fermi_paradox_1min.mp4")
 
-    assemble_video(storyboard, audio_dir, images_dir, sprite, final_output, scene_limit=3)
+    assemble_video(storyboard, audio_dir, images_dir, sprites, final_output, scene_limit=3)

@@ -40,6 +40,8 @@ class VisualBeat(BaseModel):
     shot_type: ShotType = Field(..., description="Framing and layout of the shot.")
     narrator_pose: Optional[NarratorPose] = Field(default="EXPLAINING", description="Sprite pose for the narrator (or HIDDEN if full cinematic).")
     narrator_position: Optional[str] = Field(default="bottom-left", description="Screen coordinate anchor: 'bottom-left', 'center', 'none'.")
+    infographic_concept: Optional[str] = Field(default=None, description="Detailed explanation of the educational chart, diagram, or comic scenario depicted.")
+    graphic_annotation: Optional[str] = Field(default=None, description="On-screen comic annotation such as 'RED_CROSSOUT', 'ARROW_POINTING', 'QUESTION_MARKS', or None.")
     background_prompt: str = Field(..., description="Detailed 2D cel-shaded comic style prompt for the background image.")
     text_overlay: Optional[str] = Field(default=None, description="Bold punchy thematic text card to pop on screen, e.g. '400 BILLION STARS'.")
     camera_motion: CameraMotion = Field(default="SLOW_ZOOM_IN", description="Camera movement applied to the visual beat.")

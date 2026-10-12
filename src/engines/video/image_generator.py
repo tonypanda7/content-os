@@ -2,8 +2,8 @@ import os
 import sys
 import json
 import base64
-import requests
 from pathlib import Path
+from openai import OpenAI
 from dotenv import load_dotenv
 
 # Add project root to python path
@@ -13,47 +13,46 @@ load_dotenv()
 
 API_KEY = os.getenv("LLM_API_KEY")
 IMAGE_MODEL = os.getenv("IMAGE_MODEL", "black-forest-labs/FLUX-1-schnell")
-DEEPINFRA_URL = f"https://api.deepinfra.com/v1/inference/{IMAGE_MODEL}"
+BASE_URL = os.getenv("LLM_BASE_URL", "https://api.deepinfra.com/v1/openai")
+
+client = OpenAI(
+    base_url=BASE_URL,
+    api_key=API_KEY
+)
 
 def generate_image(prompt: str, output_path: Path, width: int = 1280, height: int = 720) -> bool:
     """
-    Generates a 16:9 illustration using DeepInfra's FLUX-1-schnell model.
+    Generates a 16:9 illustration using DeepInfra's FLUX-1-schnell model via OpenAI SDK.
     """
     if not API_KEY:
         raise ValueError("LLM_API_KEY is not set in .env")
 
-    headers = {
-        "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json"
-    }
+    size_str = f"{width}x{height}"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    payload = {
-        "prompt": prompt,
-        "width": width,
-        "height": height
-    }
-
-    try:
-        response = requests.post(DEEPINFRA_URL, headers=headers, json=payload, timeout=60)
-        if response.status_code == 200:
-            result = response.json()
-            images = result.get("images", [])
-            if images:
-                b64_data = images[0].split(",")[-1]
-                output_path.parent.mkdir(parents=True, exist_ok=True)
+    for attempt in range(1, 4):
+        try:
+            res = client.images.generate(
+                model=IMAGE_MODEL,
+                prompt=prompt,
+                size=size_str,
+                response_format="b64_json"
+            )
+            if res.data and res.data[0].b64_json:
+                b64_data = res.data[0].b64_json
                 with open(output_path, "wb") as f:
                     f.write(base64.b64decode(b64_data))
-                print(f"      ✅ Saved: {output_path} ({os.path.getsize(output_path)} bytes)")
+                print(f"      ✅ Saved ({output_path.name}): {os.path.getsize(output_path)} bytes")
                 return True
-        print(f"      ❌ Failed: HTTP {response.status_code} - {response.text[:200]}")
-        return False
-    except Exception as e:
-        print(f"      ❌ Exception during image generation: {e}")
-        return False
+        except Exception as e:
+            print(f"      ⚠️ Attempt {attempt} failed: {e}")
+
+    print(f"      ❌ Failed to generate {output_path.name} after 3 attempts.")
+    return False
 
 def generate_storyboard_images(storyboard_path: Path, output_dir: Path, max_images: int = None):
     print("=========================================")
-    print(f"🎨 Image Generation Engine ({IMAGE_MODEL})")
+    print(f"🎨 Infographic Image Generation Engine ({IMAGE_MODEL})")
     print("=========================================")
 
     if not storyboard_path.exists():
@@ -62,7 +61,7 @@ def generate_storyboard_images(storyboard_path: Path, output_dir: Path, max_imag
     with open(storyboard_path, "r") as f:
         board = json.load(f)
 
-    art_style = board.get("art_style_prompt", "Clean 2D cel-shaded comic illustration, 4px crisp black linework, vibrant flat colors")
+    art_style = board.get("art_style_prompt", "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic")
     scenes = board.get("scenes", [])
     
     count = 0
@@ -79,13 +78,13 @@ def generate_storyboard_images(storyboard_path: Path, output_dir: Path, max_imag
             raw_prompt = b.get("background_prompt", "")
             
             # Combine global style anchor with beat-specific scene prompt
-            full_prompt = f"{art_style}. {raw_prompt}"
+            full_prompt = f"{art_style}. {raw_prompt}. High detail, clear educational infographic elements, comic art style, clean composition, 16:9 widescreen."
             
             img_file = output_dir / f"scene_{scene_num}_beat_{beat_idx}.jpg"
             print(f"--- Scene {scene_num} | Beat {beat_idx} ---")
-            print(f"Prompt: {full_prompt[:120]}...")
+            print(f"Prompt: {full_prompt[:140]}...")
             
-            success = generate_image(full_prompt, img_file)
+            success = generate_image(full_prompt, img_file, width=1280, height=720)
             if success:
                 count += 1
                 
@@ -98,5 +97,4 @@ def generate_storyboard_images(storyboard_path: Path, output_dir: Path, max_imag
 if __name__ == "__main__":
     board_file = Path("data/storyboard.json")
     out_folder = Path("data/images")
-    # Default to generating first 2 images
-    generate_storyboard_images(board_file, out_folder, max_images=2)
+    generate_storyboard_images(board_file, out_folder, max_images=9)
