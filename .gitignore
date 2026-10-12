@@ -12,7 +12,12 @@ wheels/
 # Secrets
 .env
 
-# Data
+# Data & Media
 data/audio*/
 data/*.wav
+data/*.mp4
+data/output/
+data/temp*/
+data/images_test/
+data/video_analysis/
 
