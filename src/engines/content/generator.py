@@ -80,19 +80,25 @@ def generate_script(
     topic: str,
     research_brief: str,
     chosen_hook: str,
-    target_platform: str = "YouTube Explainer (3 minutes)",
-    target_scenes: int = 6
+    target_platform: str = "YouTube Shorts (60 seconds)",
+    target_scenes: int = 3,
+    target_duration_seconds: int = 60
 ) -> VideoScript:
     """
     Generates a structured video script based on a topic, factual research, and a chosen starting hook.
-    Tuned for 3-minute runtime across exactly 6 tightly paced scenes.
+    Tuned for target duration and exact scene count.
     """
-    print(f"Writing final script for {target_platform} ({target_scenes} scenes, ~3 minutes)...")
+    total_target_words = int(round((target_duration_seconds / 60.0) * 140))
+    words_per_scene = max(25, int(round(total_target_words / target_scenes)))
+    min_w = words_per_scene - 5
+    max_w = words_per_scene + 5
+
+    print(f"Writing final script for {target_platform} ({target_scenes} scenes, ~{target_duration_seconds}s, ~{words_per_scene} words/scene)...")
     system_prompt = f"""You are an elite viral video scriptwriter specializing in OverSimplified-style animated explainers.
 Write a highly engaging, well-paced script using the provided Research Brief for facts.
-Target runtime: exactly 3.0 minutes (~180 seconds total, 420 to 480 words total across the entire script).
+Target runtime: exactly {target_duration_seconds} seconds (~{total_target_words} words total across the entire script).
 You MUST generate exactly {target_scenes} scenes.
-CRITICAL LENGTH REQUIREMENT: Every single scene's narration MUST contain at least 70 to 80 spoken words (30 seconds of audio per scene). Never write a brief 30-40 word summary. Elaborate on the factual details, scientific mechanisms, character perspectives, and narrative twists to give each scene full dramatic substance.
+CRITICAL LENGTH REQUIREMENT: Every single scene's narration MUST contain between {min_w} and {max_w} spoken words. Never write an overly long or overly short scene. Elaborate on the factual details, scientific mechanisms, character perspectives, and narrative twists to give each scene full dramatic punch.
 You MUST start Scene 1's narration with the exact "Chosen Hook" provided.
 
 CRITICAL INSTRUCTION FOR VOICE CONSISTENCY & TONAL FLOW:

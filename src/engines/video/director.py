@@ -106,7 +106,7 @@ def call_director_llm(messages: list, temperature: float = 0.2, max_tokens: int 
             except Exception: pass
     return ""
 
-def direct_scene(scene_data: dict) -> list[VisualBeat]:
+def direct_scene(scene_data: dict, aspect_ratio: str = "16:9") -> list[VisualBeat]:
     scene_num = scene_data["scene_number"]
     total_duration = round(float(scene_data.get("estimated_duration_seconds", 15.0)), 2)
     narration = scene_data.get("narration", "").strip()
@@ -139,6 +139,8 @@ def direct_scene(scene_data: dict) -> list[VisualBeat]:
         except Exception as e:
             print(f"      ⚠️ Parse error on attempt {parse_attempt}: {e}. Retrying LLM...")
 
+    ratio_str = "vertical 9:16 mobile portrait aspect ratio, centered vertical composition" if aspect_ratio == "9:16" else "16:9 widescreen"
+
     if not raw_beats or not isinstance(raw_beats, list):
         # Fallback to sentence split
         sentences = [s.strip() for s in re.split(r'(?<=[.?!])\s+', narration) if s.strip()]
@@ -150,7 +152,7 @@ def direct_scene(scene_data: dict) -> list[VisualBeat]:
                 "beat_index": s_idx + 1,
                 "narration_chunk": s_text,
                 "concept": f"Visual explainer depicting: {s_text[:70]}",
-                "visual_prompt": f"OverSimplified YouTube 2D cartoon explainer style, clean bold black outlines, cel-shaded flat colors, chibi characters, scene depicting {s_text}, exactly two arms, two legs, normal hands, clean composition, no pseudo-text, 16:9 widescreen",
+                "visual_prompt": f"OverSimplified YouTube 2D cartoon explainer style, clean bold black outlines, cel-shaded flat colors, chibi characters, scene depicting {s_text}, exactly two arms, two legs, normal hands, clean composition, completely clean surfaces, zero text, {ratio_str}",
                 "camera_motion": "SLOW_ZOOM_IN" if s_idx % 2 == 0 else "PAN_LEFT_TO_RIGHT"
             })
 
@@ -193,7 +195,7 @@ def direct_scene(scene_data: dict) -> list[VisualBeat]:
         if "two arms" not in raw_prompt:
             raw_prompt = f"{raw_prompt}, exactly two arms, two legs, clean anatomy, physically plausible, no clipping through objects"
         # Strict zero-text mandate: clean surfaces, no labels, no words
-        raw_prompt = f"{raw_prompt}, completely clean surfaces, zero text, zero letters, zero words, no labels, no signs, 16:9 widescreen"
+        raw_prompt = f"{raw_prompt}, completely clean surfaces, zero text, zero letters, zero words, no labels, no signs, {ratio_str}"
 
         beat = VisualBeat(
             beat_index=b_idx,
@@ -216,10 +218,15 @@ def direct_scene(scene_data: dict) -> list[VisualBeat]:
 def direct_storyboard(
     script_path: Path,
     output_path: Path,
-    max_scenes: int = None
+    max_scenes: int = None,
+    aspect_ratio: str = "16:9",
+    width: int = 1280,
+    height: int = 720,
+    target_platform: str = "YouTube Explainer"
 ) -> VideoProductionPlan:
     print("=========================================================================")
     print(f"🎬 Visual Director Agent: Intelligent Storyboard Engine ({DIRECTOR_MODEL})")
+    print(f"📐 Aspect Ratio: {aspect_ratio} ({width}x{height}) | Platform: {target_platform}")
     print("=========================================================================")
 
     if not script_path.exists():
@@ -246,7 +253,7 @@ def direct_storyboard(
         audio_file = f"scene_{scene_num}.mp3"
         narration = s.get("narration", "")
 
-        beats = direct_scene(s)
+        beats = direct_scene(s, aspect_ratio=aspect_ratio)
         total_beats += len(beats)
 
         directed_scenes.append(SceneStoryboard(
@@ -261,9 +268,12 @@ def direct_storyboard(
     plan = VideoProductionPlan(
         title=title,
         topic=topic,
-        target_platform="YouTube Longform (5 to 8 Minutes)",
-        art_style="OverSimplified YouTube 2D cartoon explainer style, clean bold black outlines, cel-shaded flat colors, chibi characters embedded in scene, exactly two arms, two legs, no pseudo-text",
+        target_platform=target_platform,
+        art_style="OverSimplified YouTube 2D cartoon explainer style, clean bold black outlines, cel-shaded flat colors, chibi characters, exactly two arms, two legs, completely clean surfaces, zero text",
         approach="Pure scene illustration and voiceover with exact sentence-level audio sync",
+        aspect_ratio=aspect_ratio,
+        width=width,
+        height=height,
         scenes=directed_scenes
     )
 

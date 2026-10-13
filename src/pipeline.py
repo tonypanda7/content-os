@@ -40,26 +40,39 @@ def slugify(text: str) -> str:
 def run_production_pipeline(
     topic: str = "auto",
     auto_topic: bool = False,
-    target_platform: str = "YouTube Explainer (3 minutes)",
-    target_scenes: int = 6,
+    aspect_ratio: str = "9:16",
+    target_duration: int = 60,
+    target_platform: str = "YouTube Shorts (60 seconds)",
+    target_scenes: int = 3,
     scene_limit: int = None,
     dry_run: bool = False,
     base_data_dir: Path = Path("data"),
     force_new: bool = False
 ) -> bool:
+    # Resolution resolution
+    if aspect_ratio == "9:16":
+        width, height = 720, 1280
+    else:
+        width, height = 1280, 720
+
     # ---------------------------------------------------------
     # STEP 0: Autonomous Topic Selection (If Auto Requested)
     # ---------------------------------------------------------
     if topic.strip().lower() == "auto" or auto_topic:
         print("\n=========================================================================")
-        print("🤖 [STEP 0/5]: Autonomous Viral Topic Selection & Research Agent")
+        print(f"🤖 [STEP 0/5]: Autonomous Viral Topic Selection & Research Agent ({target_platform})")
         print("=========================================================================")
-        decision = select_topic_autonomously()
+        decision = select_topic_autonomously(
+            target_duration_seconds=target_duration,
+            target_scenes_count=target_scenes,
+            platform=target_platform
+        )
         topic = decision["chosen_topic"]
-        target_scenes = decision.get("target_scenes_count", 6)
+        target_scenes = decision.get("target_scenes_count", target_scenes)
         print(f"🎬 Selected Topic: \"{topic}\"")
         print(f"🎯 Logline: {decision.get('logline', '')}")
         print(f"📈 Retention Strategy: {decision.get('viral_analysis', '')}")
+        print(f"⏱️ Target Runtime: {target_duration}s across {target_scenes} scenes")
         print("=========================================================================\n")
 
     topic_slug = slugify(topic)
@@ -84,11 +97,13 @@ def run_production_pipeline(
     print("=========================================================================")
     print("🚀 Content-OS: End-to-End Autonomous Video Production Engine")
     print(f"🎬 Production Topic: {topic}")
+    print(f"📱 Format: {target_platform} | Aspect Ratio: {aspect_ratio} ({width}x{height})")
     print(f"📁 Project Isolation Directory: {project_dir}")
     print(f"📝 Master Production Log: {log_file}")
     print(f"🛡️ QA Inspector: Multi-Modal Visual Inspection Agent (Active)")
-    print(f"🔧 Prompt Refiner: Autonomous Defect Remediation Agent (Active)")
-    print(f"⏱️ Target Pacing: {target_scenes} scenes (~180s runtime, OverSimplified style)")
+    print(f"🔧 Prompt Refiner: Defect Remediation Agent (Active)")
+    print(f"🚫 Zero-Text Policy: 100% Enforced (Pure Visual Storytelling)")
+    print(f"⏱️ Target Pacing: {target_scenes} scenes (~{target_duration}s runtime)")
     print(f"🔍 Mode: {'DRY RUN (Pre-flight Validation & Cost Estimate)' if dry_run else 'LIVE FULL PRODUCTION'}")
     print("=========================================================================\n")
 
@@ -102,15 +117,16 @@ def run_production_pipeline(
         print(f"   📊 Research brief completed ({len(brief)} characters).")
         print("   🎣 Brainstorming viral opening hooks...")
         hooks = generate_hooks(topic, brief, target_platform=target_platform)
-        chosen_hook = hooks[0] if hooks else f"On August 21, 1986, an entire valley went to sleep, and 1,700 people never woke up."
+        chosen_hook = hooks[0] if hooks else f"What happens when you stick your head inside a running particle accelerator?"
         print(f"   ✍️ Selected opening hook: \"{chosen_hook}\"")
-        print(f"   ✍️ Drafting full {target_scenes}-scene script tuned for 3-minute pacing...")
+        print(f"   ✍️ Drafting full {target_scenes}-scene script tuned for {target_duration}s pacing...")
         script = generate_script(
             topic=topic,
             research_brief=brief,
             chosen_hook=chosen_hook,
             target_platform=target_platform,
-            target_scenes=target_scenes
+            target_scenes=target_scenes,
+            target_duration_seconds=target_duration
         )
         with open(script_path, "w") as f:
             f.write(script.model_dump_json(indent=4))
@@ -147,8 +163,16 @@ def run_production_pipeline(
     # ---------------------------------------------------------
     print("\n--- [STEP 3/5]: Visual Director Agent (Audio-Visual Storyboard Directing) ---")
     if not storyboard_path.exists() or force_new:
-        print("   🧠 Directing scenes into semantic beats with exact sentence-level audio sync...")
-        plan = direct_storyboard(audio_script_path, storyboard_path, max_scenes=scene_limit)
+        print(f"   🧠 Directing scenes into semantic beats with exact sentence-level audio sync ({aspect_ratio})...")
+        plan = direct_storyboard(
+            audio_script_path,
+            storyboard_path,
+            max_scenes=scene_limit,
+            aspect_ratio=aspect_ratio,
+            width=width,
+            height=height,
+            target_platform=target_platform
+        )
         print(f"   ✅ Storyboard direct plan ready -> {storyboard_path}")
     else:
         print(f"   ⏩ Storyboard already exists at {storyboard_path}")
@@ -194,6 +218,7 @@ def run_production_pipeline(
         file_size_mb = os.path.getsize(final_video) / (1024 * 1024)
         print(f"\n=========================================================================")
         print(f"🎉 PRODUCTION MASTER VIDEO READY: {final_video}")
+        print(f"📐 Aspect Ratio: {aspect_ratio} ({width}x{height})")
         print(f"📦 File Size: {file_size_mb:.2f} MB")
         print(f"📝 Full Execution Log: {log_file}")
         print("=========================================================================")
@@ -206,8 +231,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Content-OS Autonomous Video Production Engine")
     parser.add_argument("--topic", type=str, default="auto", help="Video topic (or 'auto' for autonomous selection)")
     parser.add_argument("--auto-topic", action="store_true", help="Autonomously research and select viral topic")
-    parser.add_argument("--scenes", type=int, default=6, help="Target number of scenes (default: 6 for ~3-min video)")
-    parser.add_argument("--platform", type=str, default="YouTube Explainer (3 minutes)", help="Target platform and duration")
+    parser.add_argument("--aspect-ratio", type=str, default="9:16", choices=["9:16", "16:9"], help="Video aspect ratio (default: 9:16 for Shorts)")
+    parser.add_argument("--duration", type=int, default=60, help="Target video duration in seconds (default: 60)")
+    parser.add_argument("--scenes", type=int, default=3, help="Target number of scenes (default: 3 for ~60s video)")
+    parser.add_argument("--platform", type=str, default="YouTube Shorts (60 seconds)", help="Target platform and duration")
     parser.add_argument("--dry-run", action="store_true", help="Run pre-flight validation without paid generation")
     parser.add_argument("--force-new", action="store_true", help="Force new generation, bypassing cached files")
     args = parser.parse_args()
@@ -215,6 +242,8 @@ if __name__ == "__main__":
     run_production_pipeline(
         topic=args.topic,
         auto_topic=args.auto_topic,
+        aspect_ratio=args.aspect_ratio,
+        target_duration=args.duration,
         target_platform=args.platform,
         target_scenes=args.scenes,
         dry_run=args.dry_run,

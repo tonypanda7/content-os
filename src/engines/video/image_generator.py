@@ -110,10 +110,12 @@ def generate_and_verify_single_beat(
 
     current_prompt = prompt
     last_report = None
+    width = beat_info.get("width", 1280)
+    height = beat_info.get("height", 720)
 
     for attempt in range(1, max_qa_retries + 2):
-        print(f"   🎨 Generating {img_filename} (Attempt {attempt}/{max_qa_retries + 1})...")
-        ok = raw_generate_image(current_prompt, output_path)
+        print(f"   🎨 Generating {img_filename} ({width}x{height}) (Attempt {attempt}/{max_qa_retries + 1})...")
+        ok = raw_generate_image(current_prompt, output_path, width=width, height=height)
         if not ok:
             print(f"      ❌ Raw image generation failed for {img_filename}")
             continue
@@ -178,6 +180,10 @@ def generate_storyboard_images(
 
     art_style = board.get("art_style", "OverSimplified YouTube 2D cartoon explainer style, clean bold black outlines, cel-shaded flat colors, simple cartoon stick characters with round white faces and expressive eyes, thin stick limbs, exactly two arms and two legs, clear visual metaphors with diagram arrows, zero text, zero pseudo-words")
     scenes = board.get("scenes", [])
+    width = board.get("width", 1280)
+    height = board.get("height", 720)
+    aspect_ratio = board.get("aspect_ratio", "16:9")
+    ratio_clause = "vertical 9:16 mobile portrait ratio, centered vertical composition" if aspect_ratio == "9:16" else "16:9 widescreen"
 
     tasks = []
     for s in scenes:
@@ -194,7 +200,7 @@ def generate_storyboard_images(
 
             full_prompt = (
                 f"{art_style}. {raw_prompt}. {text_clause} "
-                f"16:9 widescreen, clean vector art, vibrant cel-shading, bold black outlines, "
+                f"{ratio_clause}, clean vector art, vibrant cel-shading, bold black outlines, "
                 f"clean composition, exactly two arms, two legs, normal cartoon stick hands, no extra limbs, "
                 f"no hands sticking out of closed glass, no clipping through solid objects, "
                 f"no pseudo-text, no unreadable letters, completely clean background."
@@ -207,7 +213,9 @@ def generate_storyboard_images(
                 "visual_prompt": full_prompt,
                 "concept": b.get("concept", ""),
                 "narration_chunk": b.get("narration_chunk", ""),
-                "expected_text": None
+                "expected_text": None,
+                "width": width,
+                "height": height
             })
 
     if max_images:

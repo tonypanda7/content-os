@@ -74,4 +74,7 @@ class VideoProductionPlan(BaseModel):
         description="Global art style anchor applied to all prompts to guarantee visual harmony."
     )
     approach: Optional[str] = "Pure scene illustration and voiceover with exact sentence-level audio sync"
+    aspect_ratio: Optional[str] = "16:9"
+    width: Optional[int] = 1280
+    height: Optional[int] = 720
     scenes: List[SceneStoryboard]

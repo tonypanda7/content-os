@@ -19,9 +19,16 @@ def smoothstep(p: float) -> float:
     p = max(0.0, min(1.0, p))
     return p * p * (3.0 - 2.0 * p)
 
-def apply_camera_motion(img: Image.Image, motion: str, progress: float) -> Image.Image:
+def apply_camera_motion(
+    img: Image.Image,
+    motion: str,
+    progress: float,
+    width: int = WIDTH,
+    height: int = HEIGHT
+) -> Image.Image:
     """
-    Applies cinematic Ken Burns camera pans and zooms to the illustration.
+    Applies cinematic Ken Burns camera pans and zooms to the illustration,
+    supporting both 16:9 widescreen and 9:16 vertical mobile aspect ratios.
     """
     p = max(0.0, min(1.0, progress))
     sp = smoothstep(p)
@@ -31,56 +38,56 @@ def apply_camera_motion(img: Image.Image, motion: str, progress: float) -> Image
     if motion_upper == "SLOW_ZOOM_IN":
         # Smooth zoom from 1.00 to 1.12
         z = 1.00 + 0.12 * sp
-        w, h = int(WIDTH * z), int(HEIGHT * z)
+        w, h = int(width * z), int(height * z)
         scaled = img.resize((w, h), Image.Resampling.BILINEAR)
-        crop_x = (w - WIDTH) // 2
-        crop_y = (h - HEIGHT) // 2
-        return scaled.crop((crop_x, crop_y, crop_x + WIDTH, crop_y + HEIGHT))
+        crop_x = (w - width) // 2
+        crop_y = (h - height) // 2
+        return scaled.crop((crop_x, crop_y, crop_x + width, crop_y + height))
 
     elif motion_upper == "SLOW_ZOOM_OUT":
         # Smooth zoom from 1.12 to 1.00
         z = 1.12 - 0.12 * sp
-        w, h = int(WIDTH * z), int(HEIGHT * z)
+        w, h = int(width * z), int(height * z)
         scaled = img.resize((w, h), Image.Resampling.BILINEAR)
-        crop_x = (w - WIDTH) // 2
-        crop_y = (h - HEIGHT) // 2
-        return scaled.crop((crop_x, crop_y, crop_x + WIDTH, crop_y + HEIGHT))
+        crop_x = (w - width) // 2
+        crop_y = (h - height) // 2
+        return scaled.crop((crop_x, crop_y, crop_x + width, crop_y + height))
 
     elif motion_upper == "PAN_LEFT_TO_RIGHT":
-        # Slight zoom with horizontal pan across the wide scene
+        # Slight zoom with horizontal pan
         z = 1.14
-        w, h = int(WIDTH * z), int(HEIGHT * z)
+        w, h = int(width * z), int(height * z)
         scaled = img.resize((w, h), Image.Resampling.BILINEAR)
-        max_pan = w - WIDTH
+        max_pan = w - width
         crop_x = int(max_pan * sp)
-        crop_y = (h - HEIGHT) // 2
-        return scaled.crop((crop_x, crop_y, crop_x + WIDTH, crop_y + HEIGHT))
+        crop_y = (h - height) // 2
+        return scaled.crop((crop_x, crop_y, crop_x + width, crop_y + height))
 
     elif motion_upper == "PAN_RIGHT_TO_LEFT":
         z = 1.14
-        w, h = int(WIDTH * z), int(HEIGHT * z)
+        w, h = int(width * z), int(height * z)
         scaled = img.resize((w, h), Image.Resampling.BILINEAR)
-        max_pan = w - WIDTH
+        max_pan = w - width
         crop_x = int(max_pan * (1.0 - sp))
-        crop_y = (h - HEIGHT) // 2
-        return scaled.crop((crop_x, crop_y, crop_x + WIDTH, crop_y + HEIGHT))
+        crop_y = (h - height) // 2
+        return scaled.crop((crop_x, crop_y, crop_x + width, crop_y + height))
 
     elif motion_upper == "PUNCH_IN":
         # Faster punch-in zoom for dramatic impact
         z = 1.02 + 0.14 * (p ** 0.7)
-        w, h = int(WIDTH * z), int(HEIGHT * z)
+        w, h = int(width * z), int(height * z)
         scaled = img.resize((w, h), Image.Resampling.BILINEAR)
-        crop_x = (w - WIDTH) // 2
-        crop_y = (h - HEIGHT) // 2
-        return scaled.crop((crop_x, crop_y, crop_x + WIDTH, crop_y + HEIGHT))
+        crop_x = (w - width) // 2
+        crop_y = (h - height) // 2
+        return scaled.crop((crop_x, crop_y, crop_x + width, crop_y + height))
 
     else: # STATIC with subtle high-quality framing
         z = 1.02
-        w, h = int(WIDTH * z), int(HEIGHT * z)
+        w, h = int(width * z), int(height * z)
         scaled = img.resize((w, h), Image.Resampling.BILINEAR)
-        crop_x = (w - WIDTH) // 2
-        crop_y = (h - HEIGHT) // 2
-        return scaled.crop((crop_x, crop_y, crop_x + WIDTH, crop_y + HEIGHT))
+        crop_x = (w - width) // 2
+        crop_y = (h - height) // 2
+        return scaled.crop((crop_x, crop_y, crop_x + width, crop_y + height))
 
 def resolve_beat_image(beat: dict, scene_num: int, beat_idx: int, images_dir: Path) -> Path:
     """
@@ -114,6 +121,8 @@ def render_scene(
     images_dir: Path,
     audio_path: Path,
     output_mp4: Path,
+    width: int = WIDTH,
+    height: int = HEIGHT,
     fps: int = DEFAULT_FPS
 ) -> bool:
     scene_num = scene_dict.get("scene_number", 1)
@@ -137,13 +146,13 @@ def render_scene(
             accumulated += frames
         beat_frames_list.append(frames)
 
-    print(f"\n🎬 Rendering Scene {scene_num} ({duration}s, {total_frames} frames @ {fps}fps across {len(beats)} beats)...")
+    print(f"\n🎬 Rendering Scene {scene_num} ({duration}s, {total_frames} frames @ {fps}fps across {len(beats)} beats) [{width}x{height}]...")
 
     ffmpeg_cmd = [
         "ffmpeg", "-y",
         "-f", "rawvideo",
         "-vcodec", "rawvideo",
-        "-s", f"{WIDTH}x{HEIGHT}",
+        "-s", f"{width}x{height}",
         "-pix_fmt", "rgba",
         "-r", str(fps),
         "-i", "-",
@@ -172,7 +181,7 @@ def render_scene(
         narration = beat.get("narration", "")
 
         img_path = resolve_beat_image(beat, scene_num, beat_num, images_dir)
-        img = Image.open(img_path).convert("RGBA").resize((WIDTH, HEIGHT))
+        img = Image.open(img_path).convert("RGBA").resize((width, height))
 
         print(f"   Beat {beat_num}/{len(beats)}: {num_frames} frames ({beat_duration:.1f}s) | Cam: {camera_motion} | Img: {img_path.name}")
         if narration:
@@ -180,7 +189,7 @@ def render_scene(
 
         for f_idx in range(num_frames):
             progress_in_beat = f_idx / float(num_frames) if num_frames > 1 else 0.0
-            frame = apply_camera_motion(img, camera_motion, progress_in_beat)
+            frame = apply_camera_motion(img, camera_motion, progress_in_beat, width=width, height=height)
             proc.stdin.write(frame.tobytes())
 
     proc.stdin.close()
@@ -262,6 +271,9 @@ def assemble_video(
     if scene_limit:
         scenes = scenes[:scene_limit]
 
+    width = board.get("width", WIDTH)
+    height = board.get("height", HEIGHT)
+
     temp_dir = (output_path.parent / "temp_scenes") if output_path else Path("data/temp_scenes")
     temp_dir.mkdir(parents=True, exist_ok=True)
 
@@ -277,6 +289,8 @@ def assemble_video(
             images_dir=images_dir,
             audio_path=audio_file,
             output_mp4=scene_mp4,
+            width=width,
+            height=height,
             fps=DEFAULT_FPS
         )
 
@@ -286,7 +300,7 @@ def assemble_video(
 
         rendered_scenes.append(scene_mp4)
 
-    output_path = output_path or Path("data/output/fermi_paradox_1min.mp4")
+    output_path = output_path or Path("data/output/master_output.mp4")
     success = concatenate_scenes(rendered_scenes, output_path)
     return success
 
