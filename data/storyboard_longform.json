@@ -1,0 +1,474 @@
+{
+  "title": "The Cosmic Silence: Unraveling the Fermi Paradox",
+  "topic": "Fermi Paradox",
+  "target_platform": "YouTube Longform (5 to 8 Minutes)",
+  "art_style": "OverSimplified YouTube 2D cartoon explainer style, clean bold black outlines, cel-shaded flat colors, chibi characters embedded in scene, exactly two arms, two legs, no pseudo-text",
+  "scenes": [
+    {
+      "scene_number": 1,
+      "title": "Scene 1",
+      "audio_file": "scene_1.mp3",
+      "duration": 27.28,
+      "beats": [
+        {
+          "beat_index": 1,
+          "start_time": 0.0,
+          "end_time": 6.82,
+          "duration": 6.82,
+          "narration": "On a clear, moonless night, you can look up and see thousands of twinkling stars. If you had superhuman eyes, you would see billions.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, cute flat chibi stargazer standing on a grassy hill gazing up at thousands of vibrant glowing stars and deep blue cosmic night sky, clean bold black outlines, cel-shaded flat colors, exactly two arms, no text.",
+          "image": "shot_1_1.jpg",
+          "camera_motion": "SLOW_ZOOM_IN"
+        },
+        {
+          "beat_index": 2,
+          "start_time": 6.82,
+          "end_time": 13.64,
+          "duration": 6.82,
+          "narration": "For thousands of years, humans believed we were the undisputed center of everything.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, ancient medieval king in golden crown smugly pointing at Earth at center of solar system chalkboard diagram, clean bold outlines, flat colors, exactly two arms, no text.",
+          "image": "shot_1_2.jpg",
+          "camera_motion": "PAN_LEFT_TO_RIGHT"
+        },
+        {
+          "beat_index": 3,
+          "start_time": 13.64,
+          "end_time": 20.46,
+          "duration": 6.82,
+          "narration": "But modern astronomy showed us something far more terrifying: we are just a speck of dust drifting through an infinite cosmic ocean.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, tiny Earth globe floating as a tiny blue dot amidst a gigantic swirling spiral galaxy of billions of stars, clean bold outlines, flat colors, cosmic wonder, no text.",
+          "image": "shot_1_3.jpg",
+          "camera_motion": "SLOW_ZOOM_OUT"
+        },
+        {
+          "beat_index": 4,
+          "start_time": 20.46,
+          "end_time": 27.28,
+          "duration": 6.82,
+          "narration": "And as we stare out into that overwhelming silence, one haunting question echoes in the void: Are we truly all alone?",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, cute chibi human sitting on planetary rock floating in deep space looking into dark starry void with giant glowing question mark, clean bold outlines, flat colors, exactly two arms, no text.",
+          "image": "shot_1_4.jpg",
+          "camera_motion": "SLOW_ZOOM_IN"
+        }
+      ]
+    },
+    {
+      "scene_number": 2,
+      "title": "Scene 2",
+      "audio_file": "scene_2.mp3",
+      "duration": 26.56,
+      "beats": [
+        {
+          "beat_index": 1,
+          "start_time": 0.0,
+          "end_time": 8.85,
+          "duration": 8.85,
+          "narration": "To understand why this silence is such a baffling mystery, consider the sheer mathematics of our galaxy. The Milky Way contains between one hundred and four hundred billion stars.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, giant vibrant spiral galaxy surrounded by counter display showing billions of glowing suns, cute astronomer pointing with wooden stick, clean bold outlines, flat colors, exactly two arms, no text.",
+          "image": "shot_2_1.jpg",
+          "camera_motion": "SLOW_ZOOM_IN"
+        },
+        {
+          "beat_index": 2,
+          "start_time": 8.85,
+          "end_time": 17.7,
+          "duration": 8.85,
+          "narration": "Astronomers estimate there are at least as many planets, with tens of billions floating in the habitable Goldilocks zone where liquid water can exist.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, cozy green habitable planet inside a glowing circular Goldilocks zone with a thermometer and water droplet icon, clean bold outlines, cel-shaded flat colors, clean design, no text.",
+          "image": "shot_2_2.jpg",
+          "camera_motion": "SLOW_ZOOM_OUT"
+        },
+        {
+          "beat_index": 3,
+          "start_time": 17.7,
+          "end_time": 26.56,
+          "duration": 8.86,
+          "narration": "Even if intelligent life is astonishingly rare, with odds of one in a billion, thousands of alien civilizations should be thriving right now.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, multiple friendly green aliens waving from retro cartoon silver flying saucers across the stars, clean bold outlines, flat colors, two arms each, cute expressions, no text.",
+          "image": "shot_2_3.jpg",
+          "camera_motion": "PAN_LEFT_TO_RIGHT"
+        }
+      ]
+    },
+    {
+      "scene_number": 3,
+      "title": "Scene 3",
+      "audio_file": "scene_3.mp3",
+      "duration": 26.16,
+      "beats": [
+        {
+          "beat_index": 1,
+          "start_time": 0.0,
+          "end_time": 8.72,
+          "duration": 8.72,
+          "narration": "In the summer of 1950, Nobel laureate Enrico Fermi was walking to lunch with fellow physicists Edward Teller, Herbert York, and Emil Konopinski at Los Alamos.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, four 1950s scientists in suits and lab coats walking together outside sunny Los Alamos laboratory building, clean bold outlines, cel-shaded flat colors, exactly two arms each, no text.",
+          "image": "shot_3_1.jpg",
+          "camera_motion": "PAN_LEFT_TO_RIGHT"
+        },
+        {
+          "beat_index": 2,
+          "start_time": 8.72,
+          "end_time": 17.44,
+          "duration": 8.72,
+          "narration": "They were chuckling over a New Yorker cartoon about cheerful aliens stealing New York trash cans.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, funny retro alien sneaking away carrying a silver city trash can under one arm into a flying saucer in New York alleyway, clean bold outlines, flat colors, humorous cartoon, exactly two arms, no text.",
+          "image": "shot_3_2.jpg",
+          "camera_motion": "SLOW_ZOOM_IN"
+        },
+        {
+          "beat_index": 3,
+          "start_time": 17.44,
+          "end_time": 26.16,
+          "duration": 8.72,
+          "narration": "But over soup, Fermi suddenly put down his fork, stared across the table, and blurted out: 'Where is everybody?' That simple question became the most famous paradox in astrophysics.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, Enrico Fermi at cafeteria table slamming down soup spoon with dramatic anime shock lines and wide eyes, other scientists looking startled, clean bold outlines, flat colors, exactly two arms, no text.",
+          "image": "shot_3_3.jpg",
+          "camera_motion": "PUNCH_IN"
+        }
+      ]
+    },
+    {
+      "scene_number": 4,
+      "title": "Scene 4",
+      "audio_file": "scene_4.mp3",
+      "duration": 27.6,
+      "beats": [
+        {
+          "beat_index": 1,
+          "start_time": 0.0,
+          "end_time": 9.2,
+          "duration": 9.2,
+          "narration": "Fermi realized something crucial about cosmic time. The universe is nearly fourteen billion years old, more than three times older than Earth.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, giant cosmic calendar timeline comparing Earth age to ancient universe age, cute cartoon hourglass spilling cosmic stardust, clean bold outlines, flat colors, no text.",
+          "image": "shot_4_1.jpg",
+          "camera_motion": "SLOW_ZOOM_IN"
+        },
+        {
+          "beat_index": 2,
+          "start_time": 9.2,
+          "end_time": 18.4,
+          "duration": 9.2,
+          "narration": "If an intelligent civilization developed self-replicating robotic probes traveling at just one percent of light speed, they could colonize or map every single star system in our entire galaxy in roughly fifty million years.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, cute friendly cartoon robotic spaceship multiplying into a fleet hopping from star to star across a colorful map of the Milky Way, clean bold outlines, flat colors, no text.",
+          "image": "shot_4_2.jpg",
+          "camera_motion": "PAN_LEFT_TO_RIGHT"
+        },
+        {
+          "beat_index": 3,
+          "start_time": 18.4,
+          "end_time": 27.6,
+          "duration": 9.2,
+          "narration": "Fifty million years sounds huge, but on a cosmic calendar, it is a mere blink of an eye. So why haven\u2019t they arrived?",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, cute chibi astronaut standing on empty Moon looking through binoculars into silent dark space, empty cosmic landscape, clean bold outlines, flat colors, exactly two arms, no text.",
+          "image": "shot_4_3.jpg",
+          "camera_motion": "SLOW_ZOOM_OUT"
+        }
+      ]
+    },
+    {
+      "scene_number": 5,
+      "title": "Scene 5",
+      "audio_file": "scene_5.mp3",
+      "duration": 28.56,
+      "beats": [
+        {
+          "beat_index": 1,
+          "start_time": 0.0,
+          "end_time": 9.52,
+          "duration": 9.52,
+          "narration": "In 1996, economist and futurist Robin Hanson proposed a sobering answer: The Great Filter.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, thoughtful scientist in front of chalkboard with a giant glowing cosmic brick wall barrier splitting the universe, clean bold outlines, flat colors, exactly two arms, no text.",
+          "image": "shot_5_1.jpg",
+          "camera_motion": "SLOW_ZOOM_IN"
+        },
+        {
+          "beat_index": 2,
+          "start_time": 9.52,
+          "end_time": 19.04,
+          "duration": 9.52,
+          "narration": "Imagine the journey from dead chemistry to an interstellar civilization as a grueling evolutionary obstacle course. Nine difficult steps: from abiogenesis, to single cells, to complex eukaryotic life, to tool-using intelligence, to surviving technological infancy.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, cartoon obstacle course showing primordial soup puddle, single amoeba, monkey with stick, and little human engineer running along a track, clean bold outlines, flat colors, exactly two arms, no text.",
+          "image": "shot_5_2.jpg",
+          "camera_motion": "PAN_LEFT_TO_RIGHT"
+        },
+        {
+          "beat_index": 3,
+          "start_time": 19.04,
+          "end_time": 28.56,
+          "duration": 9.52,
+          "narration": "According to this theory, at least one of these steps is practically impossible to cross.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, dramatic towering red hazard barrier blocking the running cartoon characters on the evolutionary track, clean bold outlines, flat colors, dynamic lighting, no text.",
+          "image": "shot_5_3.jpg",
+          "camera_motion": "PUNCH_IN"
+        }
+      ]
+    },
+    {
+      "scene_number": 6,
+      "title": "Scene 6",
+      "audio_file": "scene_6.mp3",
+      "duration": 27.84,
+      "beats": [
+        {
+          "beat_index": 1,
+          "start_time": 0.0,
+          "end_time": 9.28,
+          "duration": 9.28,
+          "narration": "This brings us to a chilling crossroads. If the Great Filter is behind us, say, the leap from lifeless muck to self-replicating RNA was a one-in-a-trillion freak fluke, then humanity is unimaginably lucky.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, celebratory cartoon human wearing golden laurel wreath and holding a giant golden trophy atop planet Earth, confetti raining down, clean bold outlines, flat colors, exactly two arms, no text.",
+          "image": "shot_6_1.jpg",
+          "camera_motion": "SLOW_ZOOM_IN"
+        },
+        {
+          "beat_index": 2,
+          "start_time": 9.28,
+          "end_time": 18.56,
+          "duration": 9.28,
+          "narration": "We are cosmic miracles who won the ultimate lottery. But if the filter lies in front of us\u2014whether through nuclear annihilation, runaway synthetic biology, or rogue artificial intelligence...",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, ominous futuristic hazard warning with cartoon red robot, biohazard flask, and nuclear silhouette, clean bold outlines, dramatic cel-shading, flat colors, no text.",
+          "image": "shot_6_2.jpg",
+          "camera_motion": "PAN_LEFT_TO_RIGHT"
+        },
+        {
+          "beat_index": 3,
+          "start_time": 18.56,
+          "end_time": 27.84,
+          "duration": 9.28,
+          "narration": "...then doomed ruins are the natural destiny of all intelligent civilizations.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, desolate alien desert planet with mysterious crumbling futuristic alien ruins and broken alien satellite dish under twilight twin moons, clean bold outlines, flat colors, no text.",
+          "image": "shot_6_3.jpg",
+          "camera_motion": "SLOW_ZOOM_OUT"
+        }
+      ]
+    },
+    {
+      "scene_number": 7,
+      "title": "Scene 7",
+      "audio_file": "scene_7.mp3",
+      "duration": 24.0,
+      "beats": [
+        {
+          "beat_index": 1,
+          "start_time": 0.0,
+          "end_time": 8.0,
+          "duration": 8.0,
+          "narration": "What if they are already here, but politely minding their own business? Proposed by astronomer John Ball in 1973, the Zoo Hypothesis suggests advanced civilizations consider Earth a protected wildlife reserve.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, Earth enclosed in a transparent glass terrarium sphere with cute aliens in safari hats taking notes on clipboards, clean bold outlines, cel-shaded flat colors, exactly two arms each, no text.",
+          "image": "shot_7_1.jpg",
+          "camera_motion": "SLOW_ZOOM_IN"
+        },
+        {
+          "beat_index": 2,
+          "start_time": 8.0,
+          "end_time": 16.0,
+          "duration": 8.0,
+          "narration": "Just like human zoologists avoid disturbing uncontacted tribes in the Amazon rainforest...",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, human explorer in pith helmet peeking through lush jungle leaves with binoculars observing wildlife respectfully, clean bold outlines, flat colors, exactly two arms, no text.",
+          "image": "shot_7_2.jpg",
+          "camera_motion": "PAN_LEFT_TO_RIGHT"
+        },
+        {
+          "beat_index": 3,
+          "start_time": 16.0,
+          "end_time": 24.0,
+          "duration": 8.0,
+          "narration": "...super-advanced extraterrestrials might be watching us from orbit, waiting until we mature before making first contact.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, sleek advanced alien mothership camouflaged as a cloud in Earth orbit, alien peering through futuristic periscope, clean bold outlines, flat colors, two arms, no text.",
+          "image": "shot_7_3.jpg",
+          "camera_motion": "SLOW_ZOOM_OUT"
+        }
+      ]
+    },
+    {
+      "scene_number": 8,
+      "title": "Scene 8",
+      "audio_file": "scene_8.mp3",
+      "duration": 28.64,
+      "beats": [
+        {
+          "beat_index": 1,
+          "start_time": 0.0,
+          "end_time": 9.55,
+          "duration": 9.55,
+          "narration": "Or perhaps the silence isn't peaceful; perhaps it's terrified. In his acclaimed sci-fi masterpiece, author Liu Cixin introduced the Dark Forest Theory.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, mysterious dark cosmic forest with glowing tree trunks representing distant galaxies, atmospheric shadows, clean bold outlines, cel-shaded flat colors, no text.",
+          "image": "shot_8_1.jpg",
+          "camera_motion": "SLOW_ZOOM_IN"
+        },
+        {
+          "beat_index": 2,
+          "start_time": 9.55,
+          "end_time": 19.1,
+          "duration": 9.55,
+          "narration": "Picture the universe as a pitch-black forest at midnight. Every civilization is an armed hunter stalking through the trees. Survival is the primal directive, but you can never trust the intentions of an alien stranger.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, two shadowy cartoon figures in glowing helmets creeping behind trees in dark forest holding high-tech lanterns, eyes wide with suspicion, clean bold outlines, flat colors, exactly two arms each, no text.",
+          "image": "shot_8_2.jpg",
+          "camera_motion": "PAN_LEFT_TO_RIGHT"
+        },
+        {
+          "beat_index": 3,
+          "start_time": 19.1,
+          "end_time": 28.64,
+          "duration": 9.54,
+          "narration": "In such a forest, the safest strategy upon detecting another hunter is to eliminate them. Therefore, wise civilizations remain completely silent.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, cute alien civilization planet turning off all its city lights and pulling down blackout curtains to hide in complete cosmic darkness, clean bold outlines, flat colors, humorous yet tense, no text.",
+          "image": "shot_8_3.jpg",
+          "camera_motion": "SLOW_ZOOM_OUT"
+        }
+      ]
+    },
+    {
+      "scene_number": 9,
+      "title": "Scene 9",
+      "audio_file": "scene_9.mp3",
+      "duration": 27.92,
+      "beats": [
+        {
+          "beat_index": 1,
+          "start_time": 0.0,
+          "end_time": 9.31,
+          "duration": 9.31,
+          "narration": "There is also a surprisingly hopeful possibility: we might simply be the cosmic early birds. Heavy elements like carbon, iron, and oxygen were forged inside the hearts of early dying stars.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, giant exploding supernova star forging colorful glowing chemical elements of carbon and iron in radiant cosmic bursts, clean bold outlines, flat cel-shading, vibrant colors, no text.",
+          "image": "shot_9_1.jpg",
+          "camera_motion": "SLOW_ZOOM_IN"
+        },
+        {
+          "beat_index": 2,
+          "start_time": 9.31,
+          "end_time": 18.62,
+          "duration": 9.31,
+          "narration": "It took billions of years for multiple generations of supernovas to seed the galaxy with the raw chemical building blocks needed for rocky worlds and organic life.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, swirling protoplanetary disc of rock and ice coalescing into a shiny new blue and green Earth, clean bold outlines, flat colors, cosmic formation, no text.",
+          "image": "shot_9_2.jpg",
+          "camera_motion": "PAN_LEFT_TO_RIGHT"
+        },
+        {
+          "beat_index": 3,
+          "start_time": 18.62,
+          "end_time": 27.92,
+          "duration": 9.3,
+          "narration": "Earth formed at just the right cosmological moment. We might not be late to the party; we might be the first ones to arrive.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, cute human astronaut arriving first at an empty party room in outer space with party hat, balloons, and empty punch bowl, smiling cheerfully, clean bold outlines, flat colors, exactly two arms, no text.",
+          "image": "shot_9_3.jpg",
+          "camera_motion": "SLOW_ZOOM_IN"
+        }
+      ]
+    },
+    {
+      "scene_number": 10,
+      "title": "Scene 10",
+      "audio_file": "scene_10.mp3",
+      "duration": 26.08,
+      "beats": [
+        {
+          "beat_index": 1,
+          "start_time": 0.0,
+          "end_time": 8.69,
+          "duration": 8.69,
+          "narration": "Or maybe our radio telescopes are looking for the wrong clues. Humanity has only used radio waves for about a century, and we are already shifting toward fiber optics and encrypted laser beams.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, giant radio dish telescope listening to cosmic static noise with tangled vintage radio wires, clean bold outlines, flat colors, no text.",
+          "image": "shot_10_1.jpg",
+          "camera_motion": "SLOW_ZOOM_IN"
+        },
+        {
+          "beat_index": 2,
+          "start_time": 8.69,
+          "end_time": 17.38,
+          "duration": 8.69,
+          "narration": "An advanced species might abandon loud, wasteful interstellar radio within a few hundred years.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, sleek futuristic fiber-optic laser beam slicing silently through the dark cosmos, clean bold outlines, high-tech flat colors, no text.",
+          "image": "shot_10_2.jpg",
+          "camera_motion": "PAN_LEFT_TO_RIGHT"
+        },
+        {
+          "beat_index": 3,
+          "start_time": 17.38,
+          "end_time": 26.08,
+          "duration": 8.7,
+          "narration": "Instead of expanding across physical space, they might retreat inward into virtual supercomputers or Dyson spheres that leave almost no detectable trace.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, glowing golden megastructure Dyson sphere enclosing a bright star powering a digital cybernetic paradise, clean bold outlines, flat colors, sci-fi wonder, no text.",
+          "image": "shot_10_3.jpg",
+          "camera_motion": "SLOW_ZOOM_OUT"
+        }
+      ]
+    },
+    {
+      "scene_number": 11,
+      "title": "Scene 11",
+      "audio_file": "scene_11.mp3",
+      "duration": 24.0,
+      "beats": [
+        {
+          "beat_index": 1,
+          "start_time": 0.0,
+          "end_time": 8.0,
+          "duration": 8.0,
+          "narration": "As Arthur C. Clarke famously wrote: 'Two possibilities exist: either we are alone in the Universe or we are not. Both are equally terrifying.'",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, portrait of thoughtful astronomer looking up under a magnificent arch of swirling galaxies and celestial nebulae, clean bold outlines, flat colors, exactly two arms, no text.",
+          "image": "shot_11_1.jpg",
+          "camera_motion": "SLOW_ZOOM_IN"
+        },
+        {
+          "beat_index": 2,
+          "start_time": 8.0,
+          "end_time": 16.0,
+          "duration": 8.0,
+          "narration": "If we are alone, then the fragile flame of consciousness rests solely on our shoulders, and we are the cosmos experiencing itself.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, human hands cupping a small glowing golden campfire spark shaped like planet Earth amidst the vast cold cosmos, clean bold outlines, flat cel-shading, two hands, no text.",
+          "image": "shot_11_2.jpg",
+          "camera_motion": "SLOW_ZOOM_IN"
+        },
+        {
+          "beat_index": 3,
+          "start_time": 16.0,
+          "end_time": 24.0,
+          "duration": 8.0,
+          "narration": "If we are not, then someone out there is looking back at our sun, wondering the exact same thing. Until then, the silence remains ours to break.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, beautiful split-screen visual with human stargazer on Earth on one side and friendly alien stargazer on another world on the other, both looking up at each other's stars, clean bold outlines, flat colors, exactly two arms each, no text.",
+          "image": "shot_11_3.jpg",
+          "camera_motion": "SLOW_ZOOM_OUT"
+        }
+      ]
+    },
+    {
+      "scene_number": 12,
+      "title": "Scene 12",
+      "audio_file": "scene_12.mp3",
+      "duration": 33.28,
+      "beats": [
+        {
+          "beat_index": 1,
+          "start_time": 0.0,
+          "end_time": 11.09,
+          "duration": 11.09,
+          "narration": "Perhaps the true answer to Fermi's Paradox is not that aliens are hiding, but that the story of cosmic intelligence is only just beginning. As we build mightier space telescopes, listen for whispered technosignatures, and prepare our own voyage into the stars...",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, ultra-modern James Webb style space telescope with golden hexagonal mirrors shining brightly in deep starry orbit, clean bold outlines, flat colors, no text.",
+          "image": "shot_12_1.jpg",
+          "camera_motion": "SLOW_ZOOM_IN"
+        },
+        {
+          "beat_index": 2,
+          "start_time": 11.09,
+          "end_time": 22.18,
+          "duration": 11.09,
+          "narration": "...humanity is finally taking its first steps into the great unknown. If you enjoyed this cosmic exploration, hit that like button, subscribe for more deep-dive animated explainers...",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, cute chibi astronaut and friendly alien side by side waving cheerfully next to glowing play button trophy, clean bold outlines, flat colors, exactly two arms each, no text.",
+          "image": "shot_12_2.jpg",
+          "camera_motion": "PAN_LEFT_TO_RIGHT"
+        },
+        {
+          "beat_index": 3,
+          "start_time": 22.18,
+          "end_time": 33.28,
+          "duration": 11.1,
+          "narration": "...and tell us in the comments: which theory do you believe? Until next time, keep your curiosity alive and keep looking up.",
+          "visual_prompt": "OverSimplified YouTube 2D cartoon explainer style, peaceful scenic view of Earth rising over lunar horizon under a magnificent sparkling starry galaxy, clean bold outlines, flat colors, inspiring cinematic cartoon ending, no text.",
+          "image": "shot_12_3.jpg",
+          "camera_motion": "SLOW_ZOOM_OUT"
+        }
+      ]
+    }
+  ]
+}

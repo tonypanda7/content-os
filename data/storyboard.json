@@ -1,9 +1,8 @@
 {
     "title": "The Cosmic Silence: Unraveling the Fermi Paradox",
     "topic": "Fermi Paradox",
-    "art_style_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic",
-    "narrator_concept": "Chibi astronomer skeleton professor wearing tweed jacket and bowtie",
-    "typography_theme": "Heavy bold comic sans-serif font, vibrant yellow fill, 4px solid black border",
+    "art_style": "OverSimplified YouTube 2D cartoon explainer style, clean bold outlines, cel-shaded flat colors, chibi characters embedded in scene",
+    "approach": "Pure scene illustration and voiceover (paced for readability and natural timing)",
     "scenes": [
         {
             "scene_number": 1,
@@ -13,44 +12,47 @@
                 {
                     "beat_index": 1,
                     "start_time": 0.0,
-                    "end_time": 8.0,
-                    "duration": 8.0,
-                    "shot_type": "WIDE_NARRATOR_LEFT",
-                    "narrator_pose": "EXPLAINING",
-                    "narrator_position": "bottom-left",
-                    "infographic_concept": "A massive starfield with a billion stars, each labeled with a unique identifier",
-                    "graphic_annotation": "ARROW_POINTING",
-                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, showing a sprawling starfield with various sized stars and a subtle grid pattern in the background",
-                    "text_overlay": "A BILLION STARS",
+                    "end_time": 3.6,
+                    "duration": 3.6,
+                    "narration": "Imagine looking up at a sky filled with a billion stars...",
+                    "image": "shot_1_1.jpg",
                     "camera_motion": "SLOW_ZOOM_IN"
                 },
                 {
                     "beat_index": 2,
-                    "start_time": 8.0,
-                    "end_time": 17.0,
-                    "duration": 9.0,
-                    "shot_type": "FULL_CINEMATIC_NO_NARRATOR",
-                    "narrator_pose": "HIDDEN",
-                    "narrator_position": null,
-                    "infographic_concept": "A scaled illustration of the Milky Way galaxy, with a range of 100-400 billion stars, and a comparison to the number of grains of sand on Earth",
-                    "graphic_annotation": null,
-                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, depicting the Milky Way galaxy as a massive, glowing disk with various celestial objects and a scale bar comparing it to the number of grains of sand on Earth",
-                    "text_overlay": "MILKY WAY GALAXY",
-                    "camera_motion": "PAN_LEFT_TO_RIGHT"
+                    "start_time": 3.6,
+                    "end_time": 7.2,
+                    "duration": 3.6,
+                    "narration": "...and realizing we might be entirely, terrifyingly alone.",
+                    "image": "shot_1_2.jpg",
+                    "camera_motion": "SLOW_ZOOM_OUT"
                 },
                 {
                     "beat_index": 3,
-                    "start_time": 17.0,
+                    "start_time": 7.2,
+                    "end_time": 12.8,
+                    "duration": 5.6,
+                    "narration": "The universe is vast, with an estimated 100 to 400 billion stars in the Milky Way galaxy alone.",
+                    "image": "shot_1_3.jpg",
+                    "camera_motion": "SLOW_ZOOM_IN"
+                },
+                {
+                    "beat_index": 4,
+                    "start_time": 12.8,
+                    "end_time": 18.0,
+                    "duration": 5.2,
+                    "narration": "And yet, we've found no definitive evidence of extraterrestrial life.",
+                    "image": "shot_1_4.jpg",
+                    "camera_motion": "PAN_LEFT_TO_RIGHT"
+                },
+                {
+                    "beat_index": 5,
+                    "start_time": 18.0,
                     "end_time": 23.68,
-                    "duration": 6.68,
-                    "shot_type": "SPLIT_SCREEN_DIAGRAM",
-                    "narrator_pose": "SHRUGGING_QUESTIONING",
-                    "narrator_position": "bottom-right",
-                    "infographic_concept": "A split-screen comparison of the expected presence of extraterrestrial life versus the current lack of evidence, with a question mark symbol",
-                    "graphic_annotation": "QUESTION_MARKS",
-                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, showing a split-screen diagram with a 'expected life' panel filled with alien silhouettes and a 'current evidence' panel with a large question mark and a red X symbol",
-                    "text_overlay": "WHERE IS EVERYBODY?",
-                    "camera_motion": "SLOW_ZOOM_OUT"
+                    "duration": 5.68,
+                    "narration": "This mind-boggling question has puzzled scientists and philosophers for decades: Where are the aliens?",
+                    "image": "shot_1_5.jpg",
+                    "camera_motion": "SLOW_ZOOM_IN"
                 }
             ]
         },
@@ -62,93 +64,63 @@
                 {
                     "beat_index": 1,
                     "start_time": 0.0,
-                    "end_time": 5.33,
-                    "duration": 5.33,
-                    "shot_type": "WIDE_NARRATOR_LEFT",
-                    "narrator_pose": "EXPLAINING",
-                    "narrator_position": "bottom-left",
-                    "infographic_concept": "A diagram showing the universe with various planets and galaxies, highlighting the potential for intelligent life",
-                    "graphic_annotation": "ARROW_POINTING",
-                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, of the universe with planets and galaxies labeled, including a scale bar and a red arrow pointing to a specific galaxy",
-                    "text_overlay": "INTELLIGENT LIFE",
+                    "end_time": 5.5,
+                    "duration": 5.5,
+                    "narration": "This paradox was first proposed by the brilliant physicist Enrico Fermi...",
+                    "image": "shot_2_1.jpg",
                     "camera_motion": "SLOW_ZOOM_IN"
                 },
                 {
                     "beat_index": 2,
-                    "start_time": 5.33,
-                    "end_time": 12.01,
-                    "duration": 6.68,
-                    "shot_type": "FULL_CINEMATIC_NO_NARRATOR",
-                    "narrator_pose": "HIDDEN",
-                    "narrator_position": null,
-                    "infographic_concept": "A timeline of the universe's history, highlighting the emergence of intelligent life and the subsequent silence",
-                    "graphic_annotation": "QUESTION_MARKS",
-                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, of a timeline with key events labeled, including the emergence of intelligent life and the Fermi Paradox",
-                    "text_overlay": "THE FERMI PARADOX",
-                    "camera_motion": "PAN_LEFT_TO_RIGHT"
+                    "start_time": 5.5,
+                    "end_time": 10.4,
+                    "duration": 4.9,
+                    "narration": "...who asked: if intelligent life is common in the universe, we should have seen some sign of it by now.",
+                    "image": "shot_2_2.jpg",
+                    "camera_motion": "PUNCH_IN"
                 },
                 {
                     "beat_index": 3,
-                    "start_time": 12.01,
+                    "start_time": 10.4,
                     "end_time": 16.96,
-                    "duration": 4.95,
-                    "shot_type": "CLOSEUP_NARRATOR_CENTER",
-                    "narrator_pose": "SHRUGGING_QUESTIONING",
-                    "narrator_position": "center",
-                    "infographic_concept": "A narrative comic scene showing Enrico Fermi asking the question, with a thought bubble containing a galaxy and a question mark",
-                    "graphic_annotation": "RED_CROSSOUT",
-                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, of Enrico Fermi with a thought bubble, containing a galaxy and a question mark",
-                    "text_overlay": "WHERE IS EVERYBODY?",
-                    "camera_motion": "PUNCH_IN"
+                    "duration": 6.56,
+                    "narration": "But the universe remains... Silent. The question is, what could be the reason behind this eerie silence?",
+                    "image": "shot_2_5.jpg",
+                    "camera_motion": "SLOW_ZOOM_IN"
                 }
             ]
         },
         {
             "scene_number": 3,
             "audio_file": "scene_3.mp3",
-            "duration": 14.4,
+            "duration": 14.40,
             "beats": [
                 {
                     "beat_index": 1,
                     "start_time": 0.0,
-                    "end_time": 4.8,
-                    "duration": 4.8,
-                    "shot_type": "WIDE_NARRATOR_LEFT",
-                    "narrator_pose": "EXPLAINING",
-                    "narrator_position": "bottom-left",
-                    "infographic_concept": "A diagram illustrating the concept of the Great Filter, with a series of barriers or filters that prevent civilizations from becoming interstellar",
-                    "graphic_annotation": "RED_CROSSOUT",
-                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, showing a large filter icon with a red X marked through it, and a scale bar with 'Civilization' on one end and 'Interstellar' on the other",
-                    "text_overlay": "GREAT FILTER",
-                    "camera_motion": "SLOW_ZOOM_IN"
+                    "end_time": 6.8,
+                    "duration": 6.8,
+                    "narration": "One possible answer is the Great Filter - a barrier or set of barriers that prevent civilizations from becoming interstellar. It's a chilling thought.",
+                    "image": "shot_3_2.jpg",
+                    "camera_motion": "PAN_LEFT_TO_RIGHT"
                 },
                 {
                     "beat_index": 2,
-                    "start_time": 4.8,
+                    "start_time": 6.8,
                     "end_time": 11.2,
-                    "duration": 6.4,
-                    "shot_type": "FULL_CINEMATIC_NO_NARRATOR",
-                    "narrator_pose": "HIDDEN",
-                    "narrator_position": null,
-                    "infographic_concept": "A timeline showing the progression of civilizations, with a question mark at the point where the Great Filter may be located",
-                    "graphic_annotation": "QUESTION_MARKS",
-                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, showing a long timeline with various civilization icons and a large question mark at a midpoint, labeled 'Have we passed it?'",
-                    "text_overlay": "HAVE WE PASSED IT?",
-                    "camera_motion": "PAN_LEFT_TO_RIGHT"
+                    "duration": 4.4,
+                    "narration": "Are we approaching a Great Filter that will eventually wipe us out...",
+                    "image": "shot_3_3.jpg",
+                    "camera_motion": "SLOW_ZOOM_IN"
                 },
                 {
                     "beat_index": 3,
                     "start_time": 11.2,
-                    "end_time": 14.4,
+                    "end_time": 14.40,
                     "duration": 3.2,
-                    "shot_type": "CLOSEUP_NARRATOR_CENTER",
-                    "narrator_pose": "SHRUGGING_QUESTIONING",
-                    "narrator_position": "center",
-                    "infographic_concept": "A narrative comic scene showing a character looking concerned and unsure about the Great Filter",
-                    "graphic_annotation": null,
-                    "background_prompt": "Clean 2D cel-shaded comic infographic illustration, 4px crisp black linework, vibrant flat colors, graphic novel aesthetic, showing a close-up of a character with a worried expression, looking up at a large filter icon in the background",
-                    "text_overlay": "WILL WE SURVIVE?",
-                    "camera_motion": "PUNCH_IN"
+                    "narration": "Or have we already passed it?",
+                    "image": "shot_3_5.jpg",
+                    "camera_motion": "SLOW_ZOOM_OUT"
                 }
             ]
         }

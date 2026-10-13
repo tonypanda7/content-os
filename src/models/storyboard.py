@@ -1,58 +1,65 @@
 from typing import List, Optional, Literal
 from pydantic import BaseModel, Field
 
-ShotType = Literal[
-    "WIDE_NARRATOR_LEFT",         # Narrator bottom-left talking to audience, wide background
-    "WIDE_NARRATOR_RIGHT",        # Narrator bottom-right
-    "CLOSEUP_NARRATOR_CENTER",    # Dramatic / comic punch-in on narrator
-    "FULL_CINEMATIC_NO_NARRATOR", # Epic environment, diagram, or cosmic vista without narrator
-    "SPLIT_SCREEN_DIAGRAM"        # Narrator on one side pointing to a chart, map, or prop
-]
-
-NarratorPose = Literal[
-    "EXPLAINING",            # One hand gesturing casually
-    "POINTING",              # Arm pointing at title card or background element
-    "AWE_HANDS_UP",          # Raised hands in cosmic wonder / dramatic awe
-    "SHRUGGING_QUESTIONING", # Shrugging palms up, questioning comedic face
-    "DEADPAN_NEUTRAL",       # Deadpan reaction
-    "SHOCKED",               # Jaw dropped / comedic surprise
-    "HIDDEN"                 # Off-screen for full cinematic vistas
-]
-
 CameraMotion = Literal[
     "STATIC",             # Clean hold
     "SLOW_ZOOM_IN",      # Subtle cinematic push-in (1.0x -> 1.08x)
     "SLOW_ZOOM_OUT",     # Subtle cinematic pull-out (1.08x -> 1.0x)
-    "PAN_LEFT_TO_RIGHT", # Gentle horizontal pan
-    "PAN_RIGHT_TO_LEFT", # Gentle horizontal pan
-    "PUNCH_IN"           # Snappy instant scale cut for punchlines or shocks
+    "PAN_LEFT_TO_RIGHT", # Gentle horizontal pan left to right
+    "PAN_RIGHT_TO_LEFT", # Gentle horizontal pan right to left
+    "PUNCH_IN"           # Snappy scale cut for dramatic emphasis / punchline
 ]
 
 class VisualBeat(BaseModel):
     """
     A single visual frame/shot beat within a scene.
-    Each scene typically contains 2 to 4 beats to create lively, animated pacing.
+    Each scene typically contains 2 to 4 beats to create lively, animated pacing that aligns
+    strictly with the spoken audio sentences.
     """
     beat_index: int = Field(..., description="Order of the beat within the scene.")
     start_time: float = Field(..., description="Timestamp in seconds when this visual beat starts.")
     end_time: float = Field(..., description="Timestamp in seconds when this visual beat ends.")
     duration: float = Field(..., description="Duration of this visual beat in seconds.")
-    shot_type: ShotType = Field(..., description="Framing and layout of the shot.")
-    narrator_pose: Optional[NarratorPose] = Field(default="EXPLAINING", description="Sprite pose for the narrator (or HIDDEN if full cinematic).")
-    narrator_position: Optional[str] = Field(default="bottom-left", description="Screen coordinate anchor: 'bottom-left', 'center', 'none'.")
-    infographic_concept: Optional[str] = Field(default=None, description="Detailed explanation of the educational chart, diagram, or comic scenario depicted.")
-    graphic_annotation: Optional[str] = Field(default=None, description="On-screen comic annotation such as 'RED_CROSSOUT', 'ARROW_POINTING', 'QUESTION_MARKS', or None.")
-    background_prompt: str = Field(..., description="Detailed 2D cel-shaded comic style prompt for the background image.")
-    text_overlay: Optional[str] = Field(default=None, description="Bold punchy thematic text card to pop on screen, e.g. '400 BILLION STARS'.")
-    camera_motion: CameraMotion = Field(default="SLOW_ZOOM_IN", description="Camera movement applied to the visual beat.")
+    narration_chunk: str = Field(
+        default="",
+        description="The exact sentence or phrase spoken during this visual beat."
+    )
+    concept: Optional[str] = Field(
+        default="",
+        description="Detailed educational or narrative concept depicted in this frame."
+    )
+    visual_prompt: str = Field(
+        ...,
+        description="Detailed image prompt crafted for FLUX with crisp outlines, clean anatomy, and rich context."
+    )
+    image: Optional[str] = Field(
+        default=None,
+        description="Unique filename of the generated illustration (e.g. 'shot_s3_b2.jpg')."
+    )
+    camera_motion: CameraMotion = Field(
+        default="SLOW_ZOOM_IN",
+        description="Camera movement applied to the visual beat."
+    )
+
+    # Backward-compatible fields
+    background_prompt: Optional[str] = None
+    infographic_concept: Optional[str] = None
+    shot_type: Optional[str] = "FULL_CINEMATIC"
+    narrator_pose: Optional[str] = None
+    narrator_position: Optional[str] = None
+    text_overlay: Optional[str] = None
+    expected_text: Optional[str] = None
+    graphic_annotation: Optional[str] = None
 
 class SceneStoryboard(BaseModel):
     """
     Storyboard breakdown for an entire scene, composed of multiple visual beats.
     """
     scene_number: int
+    title: Optional[str] = ""
     audio_file: str
     duration: float
+    narration: Optional[str] = ""
     beats: List[VisualBeat]
 
 class VideoProductionPlan(BaseModel):
@@ -61,16 +68,10 @@ class VideoProductionPlan(BaseModel):
     """
     title: str
     topic: str
-    art_style_prompt: str = Field(
-        ...,
-        description="Global art style anchor tag applied to all background prompts to guarantee visual harmony."
+    target_platform: Optional[str] = "YouTube Longform"
+    art_style: str = Field(
+        default="OverSimplified YouTube 2D cartoon explainer style, clean bold black outlines, cel-shaded flat colors, chibi characters embedded in scene, exactly two arms, two legs, no pseudo-text",
+        description="Global art style anchor applied to all prompts to guarantee visual harmony."
     )
-    narrator_concept: str = Field(
-        ...,
-        description="Concept and wardrobe of the protagonist/narrator fitting the theme (e.g. skeleton professor, chibi astronaut)."
-    )
-    typography_theme: str = Field(
-        ...,
-        description="Thematic display font style and color scheme for pop-in text overlays."
-    )
+    approach: Optional[str] = "Pure scene illustration and voiceover with exact sentence-level audio sync"
     scenes: List[SceneStoryboard]

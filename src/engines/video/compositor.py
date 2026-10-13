@@ -5,249 +5,117 @@ import math
 import subprocess
 import tempfile
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 
 # Add project root to python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-FONT_PATH = "/usr/share/fonts/noto/NotoSans-Black.ttf"
-DEFAULT_FPS = 24
 WIDTH = 1280
 HEIGHT = 720
+DEFAULT_FPS = 30
 
-def get_font(size: int):
-    try:
-        return ImageFont.truetype(FONT_PATH, size)
-    except Exception:
-        return ImageFont.load_default()
+def smoothstep(p: float) -> float:
+    """Smooth cubic ease-in-out curve for cinematic camera motion."""
+    p = max(0.0, min(1.0, p))
+    return p * p * (3.0 - 2.0 * p)
 
-def render_text_badge(canvas_w: int, canvas_h: int, text: str, progress_sec: float, total_sec: float) -> Image.Image:
+def apply_camera_motion(img: Image.Image, motion: str, progress: float) -> Image.Image:
     """
-    Renders an animated cel-shaded comic title card with pop-in bounce,
-    golden-yellow fill, bold black stroke, drop shadow, and dark backdrop pill.
-    """
-    if progress_sec > 4.5:
-        fade = max(0.0, 1.0 - (progress_sec - 4.5) / 0.4)
-        if fade <= 0.0:
-            return None
-    else:
-        fade = 1.0
-
-    # Pop-in bounce curve for the first 0.35s
-    if progress_sec < 0.22:
-        scale = 0.65 + 0.45 * (progress_sec / 0.22)
-    elif progress_sec < 0.35:
-        scale = 1.10 - 0.10 * ((progress_sec - 0.22) / 0.13)
-    else:
-        scale = 1.0
-
-    base_font_size = 56
-    font_size = max(20, int(base_font_size * scale))
-    font = get_font(font_size)
-
-    # Measure text
-    dummy_img = Image.new("RGBA", (10, 10))
-    dummy_draw = ImageDraw.Draw(dummy_img)
-    bbox = dummy_draw.textbbox((0, 0), text, font=font)
-    t_w = bbox[2] - bbox[0]
-    t_h = bbox[3] - bbox[1]
-
-    # Shrink font if too wide for 1280 canvas
-    max_text_w = canvas_w - 200
-    if t_w > max_text_w:
-        font_size = int(font_size * (max_text_w / t_w))
-        font = get_font(font_size)
-        bbox = dummy_draw.textbbox((0, 0), text, font=font)
-        t_w = bbox[2] - bbox[0]
-        t_h = bbox[3] - bbox[1]
-
-    center_x = canvas_w // 2
-    center_y = 105
-
-    pad_x = int(36 * scale)
-    pad_y = int(16 * scale)
-    rect = [
-        center_x - t_w // 2 - pad_x,
-        center_y - t_h // 2 - pad_y,
-        center_x + t_w // 2 + pad_x,
-        center_y + t_h // 2 + pad_y
-    ]
-
-    badge = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
-    bdraw = ImageDraw.Draw(badge)
-
-    alpha_pill = int(220 * fade)
-    alpha_border = int(255 * fade)
-
-    # Pill background with gold border
-    bdraw.rounded_rectangle(
-        rect,
-        radius=int(18 * scale),
-        fill=(12, 16, 26, alpha_pill),
-        outline=(255, 215, 0, alpha_border),
-        width=max(2, int(4 * scale))
-    )
-
-    draw_x = center_x - t_w // 2 - bbox[0]
-    draw_y = center_y - t_h // 2 - bbox[1]
-
-    # Drop shadow
-    bdraw.text(
-        (draw_x + 3, draw_y + 3),
-        text,
-        font=font,
-        fill=(0, 0, 0, int(240 * fade))
-    )
-
-    # Punchy yellow text with solid black outline
-    stroke_w = max(2, int(4 * scale))
-    bdraw.text(
-        (draw_x, draw_y),
-        text,
-        font=font,
-        fill=(255, 215, 0, int(255 * fade)),
-        stroke_width=stroke_w,
-        stroke_fill=(0, 0, 0, int(255 * fade))
-    )
-
-    return badge
-
-def render_graphic_annotation(canvas_w: int, canvas_h: int, annotation_type: str, progress_sec: float) -> Image.Image:
-    """
-    Renders on-screen comic annotations like RED_CROSSOUT ('X'), QUESTION_MARKS ('???'), or ARROW_POINTING.
-    """
-    if not annotation_type:
-        return None
-
-    overlay = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(overlay)
-
-    # Animate entrance pop
-    scale = min(1.0, progress_sec / 0.25) if progress_sec < 0.25 else 1.0
-
-    if annotation_type == "RED_CROSSOUT":
-        # Big dramatic red X over right-center area
-        cx, cy, sz = 850, 340, int(150 * scale)
-        if sz > 10:
-            # Drop shadow
-            draw.line([(cx - sz + 4, cy - sz + 4), (cx + sz + 4, cy + sz + 4)], fill=(0, 0, 0, 180), width=16)
-            draw.line([(cx - sz + 4, cy + sz + 4), (cx + sz + 4, cy - sz + 4)], fill=(0, 0, 0, 180), width=16)
-            # Red stroke
-            draw.line([(cx - sz, cy - sz), (cx + sz, cy + sz)], fill=(225, 30, 30, 245), width=14)
-            draw.line([(cx - sz, cy + sz), (cx + sz, cy - sz)], fill=(225, 30, 30, 245), width=14)
-
-    elif annotation_type == "QUESTION_MARKS":
-        font_size = max(20, int(64 * scale))
-        font = get_font(font_size)
-        # Floating ??? near narrator
-        bob = int(math.sin(progress_sec * 4.0) * 8)
-        draw.text((260, 150 + bob), "???", font=font, fill="#FFD700", stroke_width=5, stroke_fill="black")
-
-    elif annotation_type == "ARROW_POINTING":
-        # Comic yellow arrow pointing towards diagram center
-        arrow_x = int(500 + math.sin(progress_sec * 5.0) * 12)
-        arrow_y = 300
-        font = get_font(max(20, int(54 * scale)))
-        draw.text((arrow_x, arrow_y), "➔", font=font, fill="#FFD700", stroke_width=4, stroke_fill="black")
-
-    return overlay
-
-def apply_camera_motion(bg: Image.Image, motion: str, progress: float) -> Image.Image:
-    """
-    Applies Ken Burns zoom and pan effects onto a 1280x720 canvas.
+    Applies cinematic Ken Burns camera pans and zooms to the illustration.
     """
     p = max(0.0, min(1.0, progress))
+    sp = smoothstep(p)
 
-    if motion == "SLOW_ZOOM_IN":
-        z = 1.05 + 0.13 * p
+    motion_upper = (motion or "STATIC").upper()
+
+    if motion_upper == "SLOW_ZOOM_IN":
+        # Smooth zoom from 1.00 to 1.12
+        z = 1.00 + 0.12 * sp
         w, h = int(WIDTH * z), int(HEIGHT * z)
-        scaled = bg.resize((w, h), Image.Resampling.BILINEAR)
+        scaled = img.resize((w, h), Image.Resampling.BILINEAR)
         crop_x = (w - WIDTH) // 2
         crop_y = (h - HEIGHT) // 2
         return scaled.crop((crop_x, crop_y, crop_x + WIDTH, crop_y + HEIGHT))
 
-    elif motion == "SLOW_ZOOM_OUT":
-        z = 1.18 - 0.13 * p
+    elif motion_upper == "SLOW_ZOOM_OUT":
+        # Smooth zoom from 1.12 to 1.00
+        z = 1.12 - 0.12 * sp
         w, h = int(WIDTH * z), int(HEIGHT * z)
-        scaled = bg.resize((w, h), Image.Resampling.BILINEAR)
+        scaled = img.resize((w, h), Image.Resampling.BILINEAR)
         crop_x = (w - WIDTH) // 2
         crop_y = (h - HEIGHT) // 2
         return scaled.crop((crop_x, crop_y, crop_x + WIDTH, crop_y + HEIGHT))
 
-    elif motion == "PAN_LEFT_TO_RIGHT":
-        z = 1.16
+    elif motion_upper == "PAN_LEFT_TO_RIGHT":
+        # Slight zoom with horizontal pan across the wide scene
+        z = 1.14
         w, h = int(WIDTH * z), int(HEIGHT * z)
-        scaled = bg.resize((w, h), Image.Resampling.BILINEAR)
+        scaled = img.resize((w, h), Image.Resampling.BILINEAR)
         max_pan = w - WIDTH
-        crop_x = int(max_pan * p)
+        crop_x = int(max_pan * sp)
         crop_y = (h - HEIGHT) // 2
         return scaled.crop((crop_x, crop_y, crop_x + WIDTH, crop_y + HEIGHT))
 
-    elif motion == "PAN_RIGHT_TO_LEFT":
-        z = 1.16
+    elif motion_upper == "PAN_RIGHT_TO_LEFT":
+        z = 1.14
         w, h = int(WIDTH * z), int(HEIGHT * z)
-        scaled = bg.resize((w, h), Image.Resampling.BILINEAR)
+        scaled = img.resize((w, h), Image.Resampling.BILINEAR)
         max_pan = w - WIDTH
-        crop_x = int(max_pan * (1.0 - p))
+        crop_x = int(max_pan * (1.0 - sp))
         crop_y = (h - HEIGHT) // 2
         return scaled.crop((crop_x, crop_y, crop_x + WIDTH, crop_y + HEIGHT))
 
-    elif motion == "PUNCH_IN":
-        z = 1.08 + 0.16 * (p ** 0.65)
+    elif motion_upper == "PUNCH_IN":
+        # Faster punch-in zoom for dramatic impact
+        z = 1.02 + 0.14 * (p ** 0.7)
         w, h = int(WIDTH * z), int(HEIGHT * z)
-        scaled = bg.resize((w, h), Image.Resampling.BILINEAR)
+        scaled = img.resize((w, h), Image.Resampling.BILINEAR)
         crop_x = (w - WIDTH) // 2
         crop_y = (h - HEIGHT) // 2
         return scaled.crop((crop_x, crop_y, crop_x + WIDTH, crop_y + HEIGHT))
 
-    else: # STATIC
-        z = 1.05
+    else: # STATIC with subtle high-quality framing
+        z = 1.02
         w, h = int(WIDTH * z), int(HEIGHT * z)
-        scaled = bg.resize((w, h), Image.Resampling.BILINEAR)
+        scaled = img.resize((w, h), Image.Resampling.BILINEAR)
         crop_x = (w - WIDTH) // 2
         crop_y = (h - HEIGHT) // 2
         return scaled.crop((crop_x, crop_y, crop_x + WIDTH, crop_y + HEIGHT))
 
-def load_pose_sprite(sprites_dir: Path, pose_name: str) -> Image.Image:
+def resolve_beat_image(beat: dict, scene_num: int, beat_idx: int, images_dir: Path) -> Path:
     """
-    Loads the appropriate character sprite based on the directed pose.
-    Falls back gracefully if a specific pose sprite is not yet generated.
+    Finds the strictly matching illustration file for a given beat.
+    Never falls back to random images from other scenes.
     """
-    pose_map = {
-        "POINTING": "narrator_pointing.png",
-        "SHRUGGING": "narrator_shrugging.png",
-        "SHRUGGING_QUESTIONING": "narrator_shrugging.png",
-        "THINKING": "narrator_thinking.png",
-        "EXPLAINING": "narrator_explaining.png",
-        "AWE_HANDS_UP": "narrator_pointing.png"
-    }
-    filename = pose_map.get(pose_name, "narrator_explaining.png")
-    path = sprites_dir / filename
-    if path.exists():
-        img = Image.open(path).convert("RGBA")
-        bbox = img.getbbox()
-        return img.crop(bbox) if bbox else img
+    candidates = []
 
-    # Fallback
-    fallback = sprites_dir / "narrator_explaining.png"
-    if fallback.exists():
-        img = Image.open(fallback).convert("RGBA")
-        bbox = img.getbbox()
-        return img.crop(bbox) if bbox else img
-    return None
+    # 1. Direct explicit image field
+    if beat.get("image"):
+        candidates.append(images_dir / beat["image"])
+    if beat.get("background_image"):
+        candidates.append(images_dir / beat["background_image"])
+
+    # 2. Convention naming
+    candidates.append(images_dir / f"shot_s{scene_num}_b{beat_idx}.jpg")
+    candidates.append(images_dir / f"shot_{scene_num}_{beat_idx}.jpg")
+    candidates.append(images_dir / f"scene_{scene_num}_beat_{beat_idx}.jpg")
+
+    for c in candidates:
+        if c.exists() and c.stat().st_size > 1000:
+            return c
+
+    raise FileNotFoundError(
+        f"❌ Strict Alignment Error: No valid image found for Scene {scene_num} Beat {beat_idx} in {images_dir}.\n"
+        f"Checked candidates: {[c.name for c in candidates]}. Refusing to substitute random images."
+    )
 
 def render_scene(
     scene_dict: dict,
     images_dir: Path,
     audio_path: Path,
-    sprites_dir: Path,
     output_mp4: Path,
     fps: int = DEFAULT_FPS
 ) -> bool:
-    """
-    Renders a complete scene with multiple visual beats, dynamic pose swaps,
-    talking body pulse, Ken Burns camera motion, infographic annotations, and pop-up typography.
-    """
     scene_num = scene_dict.get("scene_number", 1)
     duration = scene_dict.get("duration", 15.0)
     beats = scene_dict.get("beats", [])
@@ -282,7 +150,7 @@ def render_scene(
         "-i", str(audio_path),
         "-c:v", "libx264",
         "-preset", "fast",
-        "-crf", "19",
+        "-crf", "18",
         "-pix_fmt", "yuv420p",
         "-c:a", "aac",
         "-b:a", "192k",
@@ -297,93 +165,23 @@ def render_scene(
         stderr=subprocess.PIPE
     )
 
-    elapsed_scene_sec = 0.0
-
     for b_idx, (beat, num_frames) in enumerate(zip(beats, beat_frames_list)):
         beat_num = beat.get("beat_index", b_idx + 1)
-        camera_motion = beat.get("camera_motion", "STATIC")
-        shot_type = beat.get("shot_type", "WIDE_NARRATOR_LEFT")
-        pose_name = beat.get("narrator_pose", "EXPLAINING")
-        narrator_pos = beat.get("narrator_position", "bottom-left")
-        text_overlay = beat.get("text_overlay")
-        graphic_ann = beat.get("graphic_annotation")
+        beat_duration = beat.get("duration", num_frames / float(fps))
+        camera_motion = beat.get("camera_motion", "SLOW_ZOOM_IN")
+        narration = beat.get("narration", "")
 
-        # Load background image
-        bg_path = images_dir / f"scene_{scene_num}_beat_{beat_num}.jpg"
-        if not bg_path.exists():
-            fallback = images_dir / f"scene_{scene_num}_beat_1.jpg"
-            bg_path = fallback if fallback.exists() else None
+        img_path = resolve_beat_image(beat, scene_num, beat_num, images_dir)
+        img = Image.open(img_path).convert("RGBA").resize((WIDTH, HEIGHT))
 
-        if bg_path and bg_path.exists():
-            bg_img = Image.open(bg_path).convert("RGBA")
-        else:
-            bg_img = Image.new("RGBA", (WIDTH, HEIGHT), (20, 24, 35, 255))
-
-        # Dynamic pose loading from pose library
-        has_narrator = (
-            shot_type != "FULL_CINEMATIC_NO_NARRATOR" and
-            narrator_pos is not None and
-            pose_name != "HIDDEN"
-        )
-
-        sprite = load_pose_sprite(sprites_dir, pose_name) if has_narrator else None
-        scaled_sprite = None
-        base_sprite_x = 0
-        base_sprite_y = 0
-
-        if sprite and has_narrator:
-            # Determine size by shot type
-            if "CLOSEUP" in shot_type or narrator_pos == "center":
-                target_h = 510
-            else:
-                target_h = 390
-
-            target_w = int(sprite.width * (target_h / sprite.height))
-            scaled_sprite = sprite.resize((target_w, target_h), Image.Resampling.BILINEAR)
-
-            if narrator_pos == "bottom-right":
-                scaled_sprite = scaled_sprite.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
-                base_sprite_x = WIDTH - target_w - 60
-                base_sprite_y = HEIGHT - target_h
-            elif narrator_pos == "center":
-                base_sprite_x = (WIDTH - target_w) // 2
-                base_sprite_y = HEIGHT - target_h
-            else: # bottom-left
-                base_sprite_x = 60
-                base_sprite_y = HEIGHT - target_h
-
-        print(f"   Beat {beat_num}/{len(beats)}: {num_frames} frames | Pose: {pose_name} | Cam: {camera_motion} | Annotation: {graphic_ann or 'None'} | Overlay: {text_overlay or 'None'}")
+        print(f"   Beat {beat_num}/{len(beats)}: {num_frames} frames ({beat_duration:.1f}s) | Cam: {camera_motion} | Img: {img_path.name}")
+        if narration:
+            print(f"     Narration: \"{narration[:70]}...\"")
 
         for f_idx in range(num_frames):
             progress_in_beat = f_idx / float(num_frames) if num_frames > 1 else 0.0
-            beat_sec = f_idx / float(fps)
-            scene_sec = elapsed_scene_sec + beat_sec
-
-            # 1. Background layer with camera motion
-            frame = apply_camera_motion(bg_img, camera_motion, progress_in_beat)
-
-            # 2. Anchored Narrator sprite layer with breathing & talking pulse
-            if has_narrator and scaled_sprite:
-                # Talking pulse / subtle body bounce
-                pulse_y = int(math.sin(scene_sec * 12.0) * 3.0)
-                cur_y = base_sprite_y + pulse_y
-                frame.paste(scaled_sprite, (base_sprite_x, cur_y), scaled_sprite)
-
-            # 3. Graphic Annotation layer (Red 'X', arrows, ???)
-            if graphic_ann:
-                ann_badge = render_graphic_annotation(WIDTH, HEIGHT, graphic_ann, beat_sec)
-                if ann_badge:
-                    frame = Image.alpha_composite(frame, ann_badge)
-
-            # 4. Typography Title Card overlay
-            if text_overlay:
-                badge = render_text_badge(WIDTH, HEIGHT, text_overlay, beat_sec, num_frames / float(fps))
-                if badge:
-                    frame = Image.alpha_composite(frame, badge)
-
+            frame = apply_camera_motion(img, camera_motion, progress_in_beat)
             proc.stdin.write(frame.tobytes())
-
-        elapsed_scene_sec += num_frames / float(fps)
 
     proc.stdin.close()
     stderr_output = proc.stderr.read()
@@ -418,6 +216,7 @@ def concatenate_scenes(scene_mp4s: list[Path], output_video: Path) -> bool:
     list_file.unlink(missing_ok=True)
 
     if result.returncode != 0:
+        # Fallback to filter_complex re-encoding concat
         inputs = []
         for mp4 in scene_mp4s:
             inputs.extend(["-i", str(mp4)])
@@ -429,7 +228,7 @@ def concatenate_scenes(scene_mp4s: list[Path], output_video: Path) -> bool:
             "-map", "[v]",
             "-map", "[a]",
             "-c:v", "libx264",
-            "-crf", "19",
+            "-crf", "18",
             "-c:a", "aac",
             str(output_video)
         ]
@@ -445,13 +244,13 @@ def assemble_video(
     storyboard_path: Path,
     audio_dir: Path,
     images_dir: Path,
-    sprites_dir: Path,
-    output_path: Path,
-    scene_limit: int = 3
+    sprites_dir: Path = None,
+    output_path: Path = None,
+    scene_limit: int = None
 ) -> bool:
-    print("=========================================")
-    print("🎞️ Timeline Compositor Engine (Interactive Multi-Pose Edition)")
-    print("=========================================")
+    print("=========================================================================")
+    print("🎞️ Timeline Compositor Engine (OverSimplified Pure Storyboard Edition)")
+    print("=========================================================================")
 
     if not storyboard_path.exists():
         raise FileNotFoundError(f"Storyboard not found at {storyboard_path}")
@@ -463,7 +262,7 @@ def assemble_video(
     if scene_limit:
         scenes = scenes[:scene_limit]
 
-    temp_dir = Path("data/temp_scenes")
+    temp_dir = (output_path.parent / "temp_scenes") if output_path else Path("data/temp_scenes")
     temp_dir.mkdir(parents=True, exist_ok=True)
 
     rendered_scenes = []
@@ -477,7 +276,6 @@ def assemble_video(
             scene_dict=s,
             images_dir=images_dir,
             audio_path=audio_file,
-            sprites_dir=sprites_dir,
             output_mp4=scene_mp4,
             fps=DEFAULT_FPS
         )
@@ -488,14 +286,17 @@ def assemble_video(
 
         rendered_scenes.append(scene_mp4)
 
+    output_path = output_path or Path("data/output/fermi_paradox_1min.mp4")
     success = concatenate_scenes(rendered_scenes, output_path)
     return success
 
 if __name__ == "__main__":
-    storyboard = Path("data/storyboard.json")
+    storyboard = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("data/storyboard_longform.json")
+    if not storyboard.exists():
+        storyboard = Path("data/storyboard.json")
+
     audio_dir = Path("data/audio")
     images_dir = Path("data/images")
-    sprites = Path("data/sprites")
-    final_output = Path("data/output/fermi_paradox_1min.mp4")
+    final_output = Path(sys.argv[2]) if len(sys.argv) > 2 else Path("data/output/fermi_paradox_longform.mp4")
 
-    assemble_video(storyboard, audio_dir, images_dir, sprites, final_output, scene_limit=3)
+    assemble_video(storyboard, audio_dir, images_dir, output_path=final_output)

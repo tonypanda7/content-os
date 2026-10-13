@@ -16,8 +16,21 @@ wheels/
 data/audio*/
 data/*.wav
 data/*.mp4
+*.mp4
 data/output/
 data/temp*/
 data/images_test/
 data/video_analysis/
+data/projects/*/images/
+data/projects/*/audio/
+data/projects/*/output/
+data/verified_*/
+data/ref_motion/
+data/rome_*/
+data/images/
+data/sprites/crop_*
+data/sprites/grid_*
+data/sprites/*_talk*.png
+data/sprites/test_*
+data/sprites/cool_*
 

@@ -1,0 +1,335 @@
+{
+  "shot_1_1.jpg": {
+    "image_path": "data/images/shot_1_1.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish text or misspelled words. All text elements are clean and legible. The character exhibits standard 2D cartoon anatomy with two arms, two legs, and a clear head. There are no morphing defects, extra limbs, or distorted features. The composition is stable with no warping, blurring, or melting artifacts.",
+    "fix_recommendations": ""
+  },
+  "shot_1_2.jpg": {
+    "image_path": "data/images/shot_1_2.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish or misspelled text; all labels are clearly rendered and legible. The character exhibits standard 2D cartoon anatomy with two arms and two legs, and no morphing or distortion is present. The composition is clean with no warping or melting artifacts.",
+    "fix_recommendations": ""
+  },
+  "shot_1_3.jpg": {
+    "image_path": "data/images/shot_1_3.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish text or misspelled words. All labels such as 'MILKY WAY GALAXY', '100 - 400 BILLION STARS', and 'EARTH' are clearly rendered and correctly spelled. The depicted Earth is a simple cartoon representation with no anatomical defects. There are no morphed limbs, extra arms, or distorted features. The composition is clean, with no severe warping, blurs, or melting artifacts.",
+    "fix_recommendations": "No fixes required. The image meets all quality standards."
+  },
+  "shot_1_4.jpg": {
+    "image_path": "data/images/shot_1_4.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The image contains no gibberish or misspelled text; all labels such as 'ALIEN SIGNALS: 0.' and 'ZERO EVIDENCE' are clearly rendered and legible. There are no characters present, so no anatomical defects exist. The composition is clean with no warping, blurring, or melting artifacts.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_2_1.jpg": {
+    "image_path": "data/images/shot_2_1.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish text or misspelled words. All text elements, including 'ENRICO FERMI', 'LOS ALAMOS - 1950', and other labels, are clearly rendered and legible. The characters exhibit standard 2D cartoon anatomy with two arms, two legs, and no morphological defects. There are no warping, melting, or unnatural blurs in the composition.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_2_2.jpg": {
+    "image_path": "data/images/shot_2_2.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish text; all text is clearly spelled and legible, including the speech bubble 'WHERE IS EVERYBODY?' and background labels. The characters exhibit standard 2D cartoon anatomy with two arms, two legs, and no morphing defects. There are no warping, blurring, or melting artifacts in the composition.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_2_3.jpg": {
+    "image_path": "data/images/shot_2_3.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "Inspection skipped due to temporary network timeout; default pass with manual review recommendation.",
+    "fix_recommendations": ""
+  },
+  "shot_3_1.jpg": {
+    "image_path": "data/images/shot_3_1.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration is a cartoon-style diagram with no characters, so there are no anatomy or morphing defects. All text is clearly rendered, legible, and correctly spelled, including intentional labels such as 'THE GREAT FILTER HYPOTHESIS' and 'CRITICAL BARRIER: THE GREAT FILTER'. There are no visual artifacts or warping present.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_3_2.jpg": {
+    "image_path": "data/images/shot_3_2.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The image contains no gibberish text; all text elements such as 'THE GREAT FILTER' are clearly spelled and legible. There are no characters present, so no anatomical or morphing defects exist. The composition is clean, with no warping, blurring, or melting artifacts. The visual elements are consistent with a 2D cartoon style.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_3_3.jpg": {
+    "image_path": "data/images/shot_3_3.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish or misspelled text. All labels such as 'HAZARD AHEAD' are clearly rendered and correctly spelled. The characters exhibit standard 2D cartoon anatomy with two arms, two legs, and no morphological defects. There are no warping, blurring, or melting artifacts in the composition.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_4_1.jpg": {
+    "image_path": "data/images/shot_4_1.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "Inspection skipped due to temporary network timeout; default pass with manual review recommendation.",
+    "fix_recommendations": ""
+  },
+  "shot_4_2.jpg": {
+    "image_path": "data/images/shot_4_2.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish text or misspelled words. All text elements are clearly rendered and legible. The characters exhibit standard 2D cartoon anatomy with two arms, two legs, and no morphological defects. There are no warping, blurring, or melting artifacts present in the composition.",
+    "fix_recommendations": ""
+  },
+  "shot_4_3.jpg": {
+    "image_path": "data/images/shot_4_3.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration shows a cartoon astronaut with standard 2D anatomy: two arms, two legs, and a clear head with facial features. There is no text present in the image, so no text defects are detected. The composition is clean, with no warping, blurring, or melting artifacts.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_5_1.jpg": {
+    "image_path": "data/images/shot_5_1.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish text or misspelled words. All text elements are clearly rendered and legible. The character exhibits standard 2D cartoon anatomy with two arms, two legs, and no morphological defects. There are no warping, melting, or unnatural blurs in the composition.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_5_2.jpg": {
+    "image_path": "data/images/shot_5_2.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish text or misspelled words. All text elements are clean and legible. The characters exhibit standard 2D cartoon anatomy with two arms, two legs, and clear facial features. There are no morphing defects, extra limbs, or distorted body parts. The composition is stable with no warping, blurring, or melting artifacts.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_5_3.jpg": {
+    "image_path": "data/images/shot_5_3.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish text or misspelled words. All text elements are clean and legible. The characters exhibit standard 2D cartoon anatomy with two arms, two legs, and clear facial features. There are no morphed limbs, fused fingers, or distorted body parts. The composition is stable with no warping, blurring, or melting artifacts.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_6_1.jpg": {
+    "image_path": "data/images/shot_6_1.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "Inspection skipped due to temporary network timeout; default pass with manual review recommendation.",
+    "fix_recommendations": ""
+  },
+  "shot_6_2.jpg": {
+    "image_path": "data/images/shot_6_2.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains two cartoon characters with clean 2D anatomy\u2014each with two arms and two legs, no extra limbs or distorted features. There is no text present in the image, so no text defects are detected. The composition is clear, with no warping, blurring, or melting artifacts.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_6_3.jpg": {
+    "image_path": "data/images/shot_6_3.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "Inspection skipped due to temporary network timeout; default pass with manual review recommendation.",
+    "fix_recommendations": ""
+  },
+  "shot_7_1.jpg": {
+    "image_path": "data/images/shot_7_1.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish or misspelled text. All text elements are clean and legible. The characters exhibit standard 2D cartoon anatomy with two arms, two legs, and clear facial features. There are no morphing defects, extra limbs, or distorted body parts. The composition is stable with no warping or melting artifacts.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_7_2.jpg": {
+    "image_path": "data/images/shot_7_2.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "Inspection skipped due to temporary network timeout; default pass with manual review recommendation.",
+    "fix_recommendations": ""
+  },
+  "shot_7_3.jpg": {
+    "image_path": "data/images/shot_7_3.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The image contains no gibberish or misspelled text. All visible labels are intentional and clearly rendered. The alien character has standard cartoon anatomy with two arms, two legs, and a clear head with proper facial features. There are no morphing defects, extra limbs, or distorted body parts. The composition is clean with no warping, blurring, or melting artifacts.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_8_1.jpg": {
+    "image_path": "data/images/shot_8_1.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish or misspelled text. All visible labels are intentional and clearly rendered. The characters exhibit standard 2D cartoon anatomy with two arms, two legs, and no morphological defects. There are no warping, blurring, or melting artifacts in the composition.",
+    "fix_recommendations": ""
+  },
+  "shot_8_2.jpg": {
+    "image_path": "data/images/shot_8_2.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration shows two cartoon characters with consistent 2D anatomy\u2014two arms, two legs, and clear facial features. No text is present in the image, so there are no concerns about gibberish or misspelled words. The composition is stable with no warping, blurring, or melting artifacts.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_8_3.jpg": {
+    "image_path": "data/images/shot_8_3.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish text or misspelled words. All visible text is intentional and clearly rendered. The characters exhibit standard 2D cartoon anatomy with two arms, two legs, and no morphing defects. There are no warping, blurring, or melting artifacts in the composition.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_9_1.jpg": {
+    "image_path": "data/images/shot_9_1.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish text or misspelled words. All text elements are clean and legible. The characters exhibit standard 2D cartoon anatomy with two arms, two legs, and clear facial features. There are no morphing defects, extra limbs, or distorted body parts. The composition is stable with no severe warping, blurs, or melting artifacts.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_9_2.jpg": {
+    "image_path": "data/images/shot_9_2.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish text or misspelled words. All text elements are clean and legible. The characters exhibit standard 2D cartoon anatomy with two arms, two legs, and clear facial features. There are no morphed limbs, fused fingers, or distorted body parts. The composition is stable with no warping, melting, or unnatural blurs.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_9_3.jpg": {
+    "image_path": "data/images/shot_9_3.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration is a clean cartoon with no gibberish text or misspelled words. All text elements are intentional and clearly rendered. The character has standard 2D cartoon anatomy with two arms, two legs, and a properly formed head. There are no morphing defects, extra limbs, or distorted features. The composition is stable with no warping, blurring, or melting artifacts.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_10_1.jpg": {
+    "image_path": "data/images/shot_10_1.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish or misspelled text. All labels are clearly rendered and legible. The character exhibits standard 2D cartoon anatomy with two arms, two legs, and no morphological defects. There are no warping, blurring, or melting artifacts in the composition.",
+    "fix_recommendations": ""
+  },
+  "shot_10_2.jpg": {
+    "image_path": "data/images/shot_10_2.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no text, so there are no text defects. The characters exhibit standard 2D cartoon anatomy with two arms and two legs, no fused fingers, and no distorted facial features. The composition is clean with no warping, blurring, or melting artifacts.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_10_3.jpg": {
+    "image_path": "data/images/shot_10_3.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish text or misspelled words. All text elements are clean and legible. The characters exhibit standard 2D cartoon anatomy with two arms, two legs, and clear facial features. There are no morphed limbs, fused fingers, or distorted body parts. The composition is stable with no warping, blurring, or melting artifacts.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_11_1.jpg": {
+    "image_path": "data/images/shot_11_1.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration shows a cartoon character with standard 2D anatomy: two arms, two legs, and a clear facial structure. There is no text present in the image, so no text defects are detected. The composition is clean, with no warping, blurring, or melting artifacts. All visual elements are consistent with intentional artistic design.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_11_2.jpg": {
+    "image_path": "data/images/shot_11_2.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish text or misspelled words. All text elements are clean and legible. The character anatomy is standard, with two hands, two arms, and no morphing or extra limbs. There are no warping, blurring, or melting artifacts in the composition.",
+    "fix_recommendations": ""
+  },
+  "shot_11_3.jpg": {
+    "image_path": "data/images/shot_11_3.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration shows two cartoon characters with standard 2D anatomy\u2014two arms, two legs, and clear facial features. There is no text present in the image, so no text defects are applicable. The composition is clean, with no warping, blurring, or melting artifacts. The image is visually coherent and free of AI-generated errors.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_12_1.jpg": {
+    "image_path": "data/images/shot_12_1.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish or misspelled text. All visible labels are intentional and clearly rendered. The character exhibits standard 2D cartoon anatomy with two arms, two legs, and a proportionate head. There are no morphing defects, extra limbs, or distorted features. The composition is clean with no warping, blurring, or melting artifacts.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_12_2.jpg": {
+    "image_path": "data/images/shot_12_2.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish or misspelled text. All visible labels are intentional and correctly rendered. The characters exhibit standard 2D cartoon anatomy with two arms, two legs, and clear facial features. There are no morphing defects, extra limbs, or distorted body parts. The composition is clean with no warping, blurring, or melting artifacts.",
+    "fix_recommendations": "No fixes required."
+  },
+  "shot_12_3.jpg": {
+    "image_path": "data/images/shot_12_3.jpg",
+    "status": "PASS",
+    "anatomy_valid": true,
+    "text_valid": true,
+    "defects": [],
+    "details": "The illustration contains no gibberish or misspelled text. All visible labels are intentional and correctly rendered. The character exhibits standard 2D cartoon anatomy with two arms, two legs, and a clear head with normal facial features. There are no morphing defects, extra limbs, or distorted body parts. The composition is clean with no warping, blurring, or melting artifacts.",
+    "fix_recommendations": "No fixes required."
+  }
+}
