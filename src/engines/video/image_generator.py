@@ -186,12 +186,10 @@ def generate_storyboard_images(
             b_idx = b["beat_index"]
             img_name = b.get("image") or f"shot_s{s_num}_b{b_idx}.jpg"
             raw_prompt = b.get("visual_prompt", "")
-            exp_txt = b.get("expected_text") or b.get("text_overlay")
-
             text_clause = (
-                f'A clean banner displaying the exact text "{exp_txt.upper()}". No other text.'
-                if exp_txt
-                else "Completely clean surfaces with absolutely zero text, zero letters, zero numbers, and zero scribbles. Pure visual diagram storytelling."
+                "Completely clean surfaces with absolutely zero text, zero letters, zero words, "
+                "zero numbers, zero signs, zero labels, and zero scribbles. "
+                "Pure visual diagram storytelling with arrows, cutaways, and cross-sections."
             )
 
             full_prompt = (
@@ -209,7 +207,7 @@ def generate_storyboard_images(
                 "visual_prompt": full_prompt,
                 "concept": b.get("concept", ""),
                 "narration_chunk": b.get("narration_chunk", ""),
-                "expected_text": exp_txt
+                "expected_text": None
             })
 
     if max_images:

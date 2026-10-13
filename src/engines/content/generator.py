@@ -90,8 +90,9 @@ def generate_script(
     print(f"Writing final script for {target_platform} ({target_scenes} scenes, ~3 minutes)...")
     system_prompt = f"""You are an elite viral video scriptwriter specializing in OverSimplified-style animated explainers.
 Write a highly engaging, well-paced script using the provided Research Brief for facts.
-Target runtime: exactly 3.0 minutes (~180 seconds total, ~400-450 words total).
-You MUST generate exactly {target_scenes} scenes (approximately 60-70 words per scene).
+Target runtime: exactly 3.0 minutes (~180 seconds total, 420 to 480 words total across the entire script).
+You MUST generate exactly {target_scenes} scenes.
+CRITICAL LENGTH REQUIREMENT: Every single scene's narration MUST contain at least 70 to 80 spoken words (30 seconds of audio per scene). Never write a brief 30-40 word summary. Elaborate on the factual details, scientific mechanisms, character perspectives, and narrative twists to give each scene full dramatic substance.
 You MUST start Scene 1's narration with the exact "Chosen Hook" provided.
 
 CRITICAL INSTRUCTION FOR VOICE CONSISTENCY & TONAL FLOW:

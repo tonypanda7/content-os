@@ -39,15 +39,16 @@ STRICT REMEDIATION DIRECTIVES:
    - Spatially separate the objects. Example: "A telescope mounted securely on a wooden tripod on the grass, standing beside the character. The character stands comfortably next to the tripod."
    - If in a spaceship: "Character seated safely inside the cockpit with hands on the control console, viewed through the clear cockpit glass with deep space outside."
 
-3. ZERO TOLERANCE FOR TEXT GIBBERISH:
-   - If the QA Inspector flagged pseudo-words, unreadable scribbles, or misspellings (e.g. 'GULDITIOCS CN', 'PLABT'):
-   - If text IS required: Provide ONLY the exact string in uppercase double quotes on a single clean banner (e.g., 'a clean wooden sign with the exact text "GOLDILOCKS ZONE" in bold white sans-serif letters').
-   - ELIMINATE all secondary or confusing labels. Never ask the model to generate multiple labels on different objects in one scene.
-   - If text is NOT strictly required, remove all text instructions and mandate: "Completely clean surfaces with zero letters, zero numbers, and zero text. Pure visual storytelling through color and shape."
+3. ZERO TEXT MANDATE (AMAZON FOREST REFERENCE STANDARD):
+   - ABSOLUTELY NO TEXT, NO LABELS, NO LETTERS, NO WORDS, NO SIGNS, NO SUBTITLES.
+   - Text generation in diffusion models causes gibberish, spelling errors, and costly QA retries.
+   - If QA flags ANY text or gibberish (or any defect): PURGE ALL text instructions, labels, quotes, and signboards from the prompt.
+   - Mandate: "Completely clean surfaces with zero letters, zero numbers, zero text, zero signs, and zero labels. Pure visual educational storytelling using colored layers, cutaways, cross-sections, and directional arrows."
+   - Never generate or request text.
 
 4. PRESERVE THE OVERSIMPLIFIED ART STYLE & RICH CONTEXT:
    - Retain: "OverSimplified YouTube 2D cartoon explainer style, clean bold black outlines, cel-shaded flat colors, chibi characters embedded in scene, 16:9 widescreen".
-   - Enrich the educational context, props, and setting so it directly matches the spoken narration.
+   - Enrich the educational context, props, and setting so it directly matches the spoken narration without text.
 
 5. OUTPUT FORMAT:
    Return ONLY a raw JSON object with:
@@ -139,25 +140,13 @@ def deterministic_semantic_refine(
     if not qa_report.physics_valid or any("clipping" in d.lower() or "protruding" in d.lower() or "glass" in d.lower() for d in qa_report.defects):
         changes.append("Enforced strict physical separation between characters and surrounding equipment/canopies")
 
-    # 4. Fix Text / Typography
-    text_clause = ""
-    if not qa_report.text_valid or any("gibberish" in d.lower() or "misspell" in d.lower() or "pseudo" in d.lower() for d in qa_report.defects):
-        if expected_text and attempt <= 2:
-            clean_word = expected_text.strip().upper()
-            text_clause = (
-                f'A single clean signboard cleanly displays the exact uppercase text "{clean_word}". '
-                f'Absolutely zero other text, zero numbers, zero unreadable scribbles anywhere in the scene. '
-                f'All other surfaces, planets, and backgrounds are completely blank.'
-            )
-            changes.append(f'Isolated single clean text "{clean_word}" and purged all secondary pseudo-words')
-        else:
-            text_clause = (
-                "Completely blank surfaces with absolutely zero text, zero letters, zero pseudo-words, "
-                "and zero scribbles. Pure visual educational infographic using clean shapes and vibrant color coding."
-            )
-            changes.append("Eliminated all text labels to guarantee 100% text hygiene without AI pseudo-words")
-    elif expected_text:
-        text_clause = f'A single clean signboard cleanly displays the exact uppercase text "{expected_text.upper()}". No other text.'
+    # 4. Enforce Strict Zero Text (Amazon Forest / OverSimplified Reference Standard)
+    text_clause = (
+        "Completely blank surfaces with absolutely zero text, zero letters, zero numbers, "
+        "zero pseudo-words, zero signs, and zero labels. Pure visual storytelling using clean shapes, "
+        "cutaways, flow arrows, and vibrant color coding."
+    )
+    changes.append("Eliminated all text labels to guarantee 100% text hygiene without AI pseudo-words")
 
     # 5. Assemble refined prompt
     refined_parts = [

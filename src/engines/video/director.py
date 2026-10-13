@@ -32,10 +32,12 @@ CRITICAL DIRECTING PRINCIPLES:
    - Characters have standard anatomy: exactly two arms, two legs, clean normal hands. Zero third arms, zero extra limbs.
    - Realistic physical interactions: no limbs clipping through sealed glass canopies, solid walls, or tables.
 
-3. TEXT HYGIENE & DISCIPLINE:
-   - DEFAULT TO ZERO TEXT: Rely on visual diagrams, arrows, cutaways, and color-coded elements.
-   - If a specific text word/title IS strictly required: specify the exact phrase in `expected_text` (e.g. 'HABITABLE ZONE' or 'ARE WE ALONE?').
-   - Keep text to a single short, clean phrase. Absolutely NO pseudo-words, scribbles, or multiple confusing labels.
+3. STRICT ZERO TEXT MANDATE (AMAZON FOREST / OVERSIMPLIFIED REFERENCE STANDARD):
+   - ABSOLUTELY NO TEXT, NO LABELS, NO LETTERS, NO WORDS, NO NUMBERS, NO SIGNS, NO SUBTITLES in the illustrations.
+   - Text generation in diffusion models causes garbled pseudo-words, spelling errors, and unnecessary QA rework.
+   - Every visual beat MUST rely 100% on pure pictorial storytelling: colored fluid layers, directional arrows, stick-figure gestures, cross-sections, cutaways, and clean props (exactly like the reference video).
+   - Never instruct the model to write text on signs, banners, blackboards, or screens.
+   - Set "expected_text": null for ALL beats without exception.
 
 4. OUTPUT STRICT RAW JSON:
    Return ONLY a valid JSON array of beats. No markdown, no commentary.
@@ -189,7 +191,9 @@ def direct_scene(scene_data: dict) -> list[VisualBeat]:
         if "OverSimplified" not in raw_prompt:
             raw_prompt = f"OverSimplified YouTube 2D cartoon explainer style, clean bold black outlines, cel-shaded flat colors, {raw_prompt}"
         if "two arms" not in raw_prompt:
-            raw_prompt = f"{raw_prompt}, exactly two arms, two legs, clean anatomy, physically plausible, no clipping through objects, no pseudo-words or gibberish, 16:9 widescreen"
+            raw_prompt = f"{raw_prompt}, exactly two arms, two legs, clean anatomy, physically plausible, no clipping through objects"
+        # Strict zero-text mandate: clean surfaces, no labels, no words
+        raw_prompt = f"{raw_prompt}, completely clean surfaces, zero text, zero letters, zero words, no labels, no signs, 16:9 widescreen"
 
         beat = VisualBeat(
             beat_index=b_idx,
@@ -201,7 +205,7 @@ def direct_scene(scene_data: dict) -> list[VisualBeat]:
             visual_prompt=raw_prompt,
             image=f"shot_s{scene_num}_b{b_idx}.jpg",
             camera_motion=cam,
-            expected_text=b.get("expected_text")
+            expected_text=None
         )
         beats.append(beat)
         print(f"      Beat {b_idx}: [{start_t}s - {end_t}s ({beat_dur}s)] -> {beat.image} | Cam: {cam}")
