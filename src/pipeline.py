@@ -5,9 +5,10 @@ import argparse
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Ensure project root is in path
+# Ensure project root is in sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from src.engines.content.topic_selector import select_topic_autonomously
 from src.engines.content.researcher import gather_research
 from src.engines.content.generator import generate_hooks, generate_script
 from src.engines.tts.generator import run_tts_pipeline
@@ -17,20 +18,59 @@ from src.engines.video.compositor import assemble_video
 
 load_dotenv()
 
+class TeeLogger:
+    """Streams all logs simultaneously to terminal stdout and a persistent log file with immediate flushing."""
+    def __init__(self, log_path: Path):
+        self.terminal = sys.__stdout__
+        self.log_file = open(log_path, "a", encoding="utf-8")
+
+    def write(self, message):
+        self.terminal.write(message)
+        self.terminal.flush()
+        self.log_file.write(message)
+        self.log_file.flush()
+
+    def flush(self):
+        self.terminal.flush()
+        self.log_file.flush()
+
 def slugify(text: str) -> str:
     return "".join(c if c.isalnum() else "_" for c in text.lower()).strip("_")
 
 def run_production_pipeline(
-    topic: str = "The Fermi Paradox",
-    target_platform: str = "YouTube Longform (5 to 8 minutes)",
+    topic: str = "auto",
+    auto_topic: bool = False,
+    target_platform: str = "YouTube Explainer (3 minutes)",
+    target_scenes: int = 6,
     scene_limit: int = None,
     dry_run: bool = False,
     base_data_dir: Path = Path("data"),
     force_new: bool = False
 ) -> bool:
+    # ---------------------------------------------------------
+    # STEP 0: Autonomous Topic Selection (If Auto Requested)
+    # ---------------------------------------------------------
+    if topic.strip().lower() == "auto" or auto_topic:
+        print("\n=========================================================================")
+        print("🤖 [STEP 0/5]: Autonomous Viral Topic Selection & Research Agent")
+        print("=========================================================================")
+        decision = select_topic_autonomously()
+        topic = decision["chosen_topic"]
+        target_scenes = decision.get("target_scenes_count", 6)
+        print(f"🎬 Selected Topic: \"{topic}\"")
+        print(f"🎯 Logline: {decision.get('logline', '')}")
+        print(f"📈 Retention Strategy: {decision.get('viral_analysis', '')}")
+        print("=========================================================================\n")
+
     topic_slug = slugify(topic)
     project_dir = base_data_dir / "projects" / topic_slug
     project_dir.mkdir(parents=True, exist_ok=True)
+
+    # Initialize dual logging
+    log_file = project_dir / "production_master.log"
+    tee = TeeLogger(log_file)
+    sys.stdout = tee
+    sys.stderr = tee
 
     script_path = project_dir / "script.json"
     audio_script_path = project_dir / "script_with_audio.json"
@@ -42,11 +82,14 @@ def run_production_pipeline(
     final_video = output_dir / f"{topic_slug}_master.mp4"
 
     print("=========================================================================")
-    print("🚀 Content-OS: Autonomous Video Production Pipeline")
-    print(f"🎬 Topic: {topic}")
+    print("🚀 Content-OS: End-to-End Autonomous Video Production Engine")
+    print(f"🎬 Production Topic: {topic}")
     print(f"📁 Project Isolation Directory: {project_dir}")
-    print(f"🛡️ QA Inspector: Autonomous Multi-Modal Visual Inspection Agent (Enabled)")
-    print(f"🔍 Mode: {'DRY RUN (Pre-flight Validation & Cost Estimate)' if dry_run else 'LIVE PRODUCTION'}")
+    print(f"📝 Master Production Log: {log_file}")
+    print(f"🛡️ QA Inspector: Multi-Modal Visual Inspection Agent (Active)")
+    print(f"🔧 Prompt Refiner: Autonomous Defect Remediation Agent (Active)")
+    print(f"⏱️ Target Pacing: {target_scenes} scenes (~180s runtime, OverSimplified style)")
+    print(f"🔍 Mode: {'DRY RUN (Pre-flight Validation & Cost Estimate)' if dry_run else 'LIVE FULL PRODUCTION'}")
     print("=========================================================================\n")
 
     # ---------------------------------------------------------
@@ -54,16 +97,24 @@ def run_production_pipeline(
     # ---------------------------------------------------------
     print("--- [STEP 1/5]: Research & Scriptwriting Agent ---")
     if not script_path.exists() or force_new:
-        print(f"   🔎 Gathering factual research on '{topic}'...")
+        print(f"   🔎 Gathering comprehensive factual research on '{topic}'...")
         brief = gather_research(topic)
-        print("   🎣 Generating viral opening hooks...")
+        print(f"   📊 Research brief completed ({len(brief)} characters).")
+        print("   🎣 Brainstorming viral opening hooks...")
         hooks = generate_hooks(topic, brief, target_platform=target_platform)
-        chosen_hook = hooks[0] if hooks else f"Why is the universe so silent?"
-        print(f"   ✍️ Drafting full script with chosen hook: \"{chosen_hook[:60]}...\"")
-        script = generate_script(topic, brief, chosen_hook, target_platform=target_platform)
+        chosen_hook = hooks[0] if hooks else f"On August 21, 1986, an entire valley went to sleep, and 1,700 people never woke up."
+        print(f"   ✍️ Selected opening hook: \"{chosen_hook}\"")
+        print(f"   ✍️ Drafting full {target_scenes}-scene script tuned for 3-minute pacing...")
+        script = generate_script(
+            topic=topic,
+            research_brief=brief,
+            chosen_hook=chosen_hook,
+            target_platform=target_platform,
+            target_scenes=target_scenes
+        )
         with open(script_path, "w") as f:
             f.write(script.model_dump_json(indent=4))
-        print(f"   ✅ Script generated with {len(script.scenes)} scenes -> {script_path}")
+        print(f"   ✅ Script successfully generated with {len(script.scenes)} scenes -> {script_path}")
     else:
         print(f"   ⏩ Reusing existing script at {script_path}")
 
@@ -76,7 +127,6 @@ def run_production_pipeline(
             print("   🔍 [Dry Run]: Audio synthesis simulated. Calculating estimated durations...")
             with open(script_path, "r") as f:
                 raw_script = json.load(f)
-            # Estimate 140 words per minute
             total_est = 0.0
             for s in raw_script["scenes"]:
                 words = len(s["narration"].split())
@@ -88,7 +138,7 @@ def run_production_pipeline(
             print(f"   ✅ Estimated audio duration: {total_est:.1f}s (~{total_est/60:.1f} mins)")
         else:
             run_tts_pipeline(script_path, project_dir)
-            print(f"   ✅ All audio files synthesized in {audio_dir}")
+            print(f"   ✅ All scene audio tracks synthesized in {audio_dir}")
     else:
         print(f"   ⏩ Audio files already exist in {audio_dir}")
 
@@ -112,7 +162,7 @@ def run_production_pipeline(
         output_dir=images_dir,
         max_images=(scene_limit * 3) if scene_limit else None,
         enable_qa=True,
-        max_workers=3,
+        max_workers=2,
         dry_run=dry_run
     )
 
@@ -124,7 +174,7 @@ def run_production_pipeline(
         print(f"✅ Image Isolation Directory: {images_dir}")
         print(f"✅ QA Inspector Protocol: 4-tier check (anatomy, physical plausibility, typography, context)")
         print(f"✅ Audio-Visual Synchronization: Mathematical sentence-level duration weighting verified")
-        print("💡 The pipeline is completely verified. No paid APIs were invoked during dry run.")
+        print("💡 Pre-flight validation successful.")
         print("=========================================================================\n")
         return True
 
@@ -141,9 +191,11 @@ def run_production_pipeline(
     )
 
     if success:
+        file_size_mb = os.path.getsize(final_video) / (1024 * 1024)
         print(f"\n=========================================================================")
         print(f"🎉 PRODUCTION MASTER VIDEO READY: {final_video}")
-        print(f"Size: {os.path.getsize(final_video)} bytes")
+        print(f"📦 File Size: {file_size_mb:.2f} MB")
+        print(f"📝 Full Execution Log: {log_file}")
         print("=========================================================================")
     else:
         print("\n❌ Video assembly failed.")
@@ -152,15 +204,19 @@ def run_production_pipeline(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Content-OS Autonomous Video Production Engine")
-    parser.add_argument("--topic", type=str, default="The Fermi Paradox", help="Video topic")
+    parser.add_argument("--topic", type=str, default="auto", help="Video topic (or 'auto' for autonomous selection)")
+    parser.add_argument("--auto-topic", action="store_true", help="Autonomously research and select viral topic")
+    parser.add_argument("--scenes", type=int, default=6, help="Target number of scenes (default: 6 for ~3-min video)")
+    parser.add_argument("--platform", type=str, default="YouTube Explainer (3 minutes)", help="Target platform and duration")
     parser.add_argument("--dry-run", action="store_true", help="Run pre-flight validation without paid generation")
-    parser.add_argument("--scenes", type=int, default=None, help="Limit number of scenes")
     parser.add_argument("--force-new", action="store_true", help="Force new generation, bypassing cached files")
     args = parser.parse_args()
 
     run_production_pipeline(
         topic=args.topic,
-        scene_limit=args.scenes,
+        auto_topic=args.auto_topic,
+        target_platform=args.platform,
+        target_scenes=args.scenes,
         dry_run=args.dry_run,
         force_new=args.force_new
     )

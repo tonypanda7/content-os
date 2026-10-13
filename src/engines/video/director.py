@@ -200,7 +200,8 @@ def direct_scene(scene_data: dict) -> list[VisualBeat]:
             concept=b.get("concept", ""),
             visual_prompt=raw_prompt,
             image=f"shot_s{scene_num}_b{b_idx}.jpg",
-            camera_motion=cam
+            camera_motion=cam,
+            expected_text=b.get("expected_text")
         )
         beats.append(beat)
         print(f"      Beat {b_idx}: [{start_t}s - {end_t}s ({beat_dur}s)] -> {beat.image} | Cam: {cam}")
