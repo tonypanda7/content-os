@@ -41,10 +41,11 @@ def run_production_pipeline(
     topic: str = "auto",
     auto_topic: bool = False,
     aspect_ratio: str = "9:16",
-    target_duration: int = 60,
-    target_platform: str = "YouTube Shorts (60 seconds)",
+    target_duration: int = 50,
+    target_platform: str = "YouTube Shorts (45 to 50 seconds)",
     target_scenes: int = 3,
     scene_limit: int = None,
+    speed_factor: float = 1.07,
     dry_run: bool = False,
     base_data_dir: Path = Path("data"),
     force_new: bool = False
@@ -211,7 +212,8 @@ def run_production_pipeline(
         audio_dir=audio_dir,
         images_dir=images_dir,
         output_path=final_video,
-        scene_limit=scene_limit
+        scene_limit=scene_limit,
+        speed_factor=speed_factor
     )
 
     if success:
@@ -219,6 +221,8 @@ def run_production_pipeline(
         print(f"\n=========================================================================")
         print(f"🎉 PRODUCTION MASTER VIDEO READY: {final_video}")
         print(f"📐 Aspect Ratio: {aspect_ratio} ({width}x{height})")
+        if speed_factor > 1.01:
+            print(f"⚡ Subtle Pacing Speedup: {speed_factor}x applied")
         print(f"📦 File Size: {file_size_mb:.2f} MB")
         print(f"📝 Full Execution Log: {log_file}")
         print("=========================================================================")
@@ -232,9 +236,10 @@ if __name__ == "__main__":
     parser.add_argument("--topic", type=str, default="auto", help="Video topic (or 'auto' for autonomous selection)")
     parser.add_argument("--auto-topic", action="store_true", help="Autonomously research and select viral topic")
     parser.add_argument("--aspect-ratio", type=str, default="9:16", choices=["9:16", "16:9"], help="Video aspect ratio (default: 9:16 for Shorts)")
-    parser.add_argument("--duration", type=int, default=60, help="Target video duration in seconds (default: 60)")
-    parser.add_argument("--scenes", type=int, default=3, help="Target number of scenes (default: 3 for ~60s video)")
-    parser.add_argument("--platform", type=str, default="YouTube Shorts (60 seconds)", help="Target platform and duration")
+    parser.add_argument("--duration", type=int, default=50, help="Target video duration in seconds (default: 50)")
+    parser.add_argument("--scenes", type=int, default=3, help="Target number of scenes (default: 3 for ~45-50s video)")
+    parser.add_argument("--speed", type=float, default=1.07, help="Subtle pacing speedup multiplier (default: 1.07)")
+    parser.add_argument("--platform", type=str, default="YouTube Shorts (45 to 50 seconds)", help="Target platform and duration")
     parser.add_argument("--dry-run", action="store_true", help="Run pre-flight validation without paid generation")
     parser.add_argument("--force-new", action="store_true", help="Force new generation, bypassing cached files")
     args = parser.parse_args()
@@ -246,6 +251,7 @@ if __name__ == "__main__":
         target_duration=args.duration,
         target_platform=args.platform,
         target_scenes=args.scenes,
+        speed_factor=args.speed,
         dry_run=args.dry_run,
         force_new=args.force_new
     )

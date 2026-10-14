@@ -249,16 +249,43 @@ def concatenate_scenes(scene_mp4s: list[Path], output_video: Path) -> bool:
     print(f"🎉 FINAL VIDEO READY: {output_video} ({os.path.getsize(output_video)} bytes)")
     return True
 
+def apply_video_speedup(input_path: Path, output_path: Path, speed_factor: float = 1.07) -> bool:
+    """Slightly speeds up video and audio (atempo + setpts) to enhance pacing and viewer retention."""
+    print(f"⚡ Applying subtle pacing speedup ({speed_factor}x) for high-retention Shorts flow...")
+    cmd = [
+        "ffmpeg", "-y",
+        "-i", str(input_path),
+        "-filter_complex", f"[0:v]setpts=PTS/{speed_factor}[v];[0:a]atempo={speed_factor}[a]",
+        "-map", "[v]",
+        "-map", "[a]",
+        "-c:v", "libx264",
+        "-preset", "fast",
+        "-crf", "18",
+        "-c:a", "aac",
+        "-b:a", "192k",
+        str(output_path)
+    ]
+    res = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+    if res.returncode == 0 and output_path.exists():
+        print(f"   ✅ Speedup applied successfully -> {output_path.name}")
+        return True
+    else:
+        print(f"   ⚠️ Speedup failed ({res.stderr.decode()[:200]}), falling back to original video.")
+        return False
+
 def assemble_video(
     storyboard_path: Path,
     audio_dir: Path,
     images_dir: Path,
     sprites_dir: Path = None,
     output_path: Path = None,
-    scene_limit: int = None
+    scene_limit: int = None,
+    speed_factor: float = 1.0
 ) -> bool:
     print("=========================================================================")
     print("🎞️ Timeline Compositor Engine (OverSimplified Pure Storyboard Edition)")
+    if speed_factor > 1.01:
+        print(f"⚡ Pacing Speedup: {speed_factor}x")
     print("=========================================================================")
 
     if not storyboard_path.exists():
@@ -301,8 +328,20 @@ def assemble_video(
         rendered_scenes.append(scene_mp4)
 
     output_path = output_path or Path("data/output/master_output.mp4")
-    success = concatenate_scenes(rendered_scenes, output_path)
-    return success
+
+    if speed_factor > 1.01:
+        raw_concat = temp_dir / "raw_concat_master.mp4"
+        success = concatenate_scenes(rendered_scenes, raw_concat)
+        if success:
+            speedup_success = apply_video_speedup(raw_concat, output_path, speed_factor=speed_factor)
+            if not speedup_success:
+                import shutil
+                shutil.copy(raw_concat, output_path)
+            return True
+        return False
+    else:
+        success = concatenate_scenes(rendered_scenes, output_path)
+        return success
 
 if __name__ == "__main__":
     storyboard = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("data/storyboard_longform.json")
