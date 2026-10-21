@@ -1,0 +1,128 @@
+{
+    "title": "The Cosmic Silence: Unraveling the Fermi Paradox",
+    "topic": "Fermi Paradox",
+    "art_style": "OverSimplified YouTube 2D cartoon explainer style, clean bold outlines, cel-shaded flat colors, chibi characters embedded in scene",
+    "approach": "Pure scene illustration and voiceover (paced for readability and natural timing)",
+    "scenes": [
+        {
+            "scene_number": 1,
+            "audio_file": "scene_1.mp3",
+            "duration": 23.68,
+            "beats": [
+                {
+                    "beat_index": 1,
+                    "start_time": 0.0,
+                    "end_time": 3.6,
+                    "duration": 3.6,
+                    "narration": "Imagine looking up at a sky filled with a billion stars...",
+                    "image": "shot_1_1.jpg",
+                    "camera_motion": "SLOW_ZOOM_IN"
+                },
+                {
+                    "beat_index": 2,
+                    "start_time": 3.6,
+                    "end_time": 7.2,
+                    "duration": 3.6,
+                    "narration": "...and realizing we might be entirely, terrifyingly alone.",
+                    "image": "shot_1_2.jpg",
+                    "camera_motion": "SLOW_ZOOM_OUT"
+                },
+                {
+                    "beat_index": 3,
+                    "start_time": 7.2,
+                    "end_time": 12.8,
+                    "duration": 5.6,
+                    "narration": "The universe is vast, with an estimated 100 to 400 billion stars in the Milky Way galaxy alone.",
+                    "image": "shot_1_3.jpg",
+                    "camera_motion": "SLOW_ZOOM_IN"
+                },
+                {
+                    "beat_index": 4,
+                    "start_time": 12.8,
+                    "end_time": 18.0,
+                    "duration": 5.2,
+                    "narration": "And yet, we've found no definitive evidence of extraterrestrial life.",
+                    "image": "shot_1_4.jpg",
+                    "camera_motion": "PAN_LEFT_TO_RIGHT"
+                },
+                {
+                    "beat_index": 5,
+                    "start_time": 18.0,
+                    "end_time": 23.68,
+                    "duration": 5.68,
+                    "narration": "This mind-boggling question has puzzled scientists and philosophers for decades: Where are the aliens?",
+                    "image": "shot_1_5.jpg",
+                    "camera_motion": "SLOW_ZOOM_IN"
+                }
+            ]
+        },
+        {
+            "scene_number": 2,
+            "audio_file": "scene_2.mp3",
+            "duration": 16.96,
+            "beats": [
+                {
+                    "beat_index": 1,
+                    "start_time": 0.0,
+                    "end_time": 5.5,
+                    "duration": 5.5,
+                    "narration": "This paradox was first proposed by the brilliant physicist Enrico Fermi...",
+                    "image": "shot_2_1.jpg",
+                    "camera_motion": "SLOW_ZOOM_IN"
+                },
+                {
+                    "beat_index": 2,
+                    "start_time": 5.5,
+                    "end_time": 10.4,
+                    "duration": 4.9,
+                    "narration": "...who asked: if intelligent life is common in the universe, we should have seen some sign of it by now.",
+                    "image": "shot_2_2.jpg",
+                    "camera_motion": "PUNCH_IN"
+                },
+                {
+                    "beat_index": 3,
+                    "start_time": 10.4,
+                    "end_time": 16.96,
+                    "duration": 6.56,
+                    "narration": "But the universe remains... Silent. The question is, what could be the reason behind this eerie silence?",
+                    "image": "shot_2_5.jpg",
+                    "camera_motion": "SLOW_ZOOM_IN"
+                }
+            ]
+        },
+        {
+            "scene_number": 3,
+            "audio_file": "scene_3.mp3",
+            "duration": 14.40,
+            "beats": [
+                {
+                    "beat_index": 1,
+                    "start_time": 0.0,
+                    "end_time": 6.8,
+                    "duration": 6.8,
+                    "narration": "One possible answer is the Great Filter - a barrier or set of barriers that prevent civilizations from becoming interstellar. It's a chilling thought.",
+                    "image": "shot_3_2.jpg",
+                    "camera_motion": "PAN_LEFT_TO_RIGHT"
+                },
+                {
+                    "beat_index": 2,
+                    "start_time": 6.8,
+                    "end_time": 11.2,
+                    "duration": 4.4,
+                    "narration": "Are we approaching a Great Filter that will eventually wipe us out...",
+                    "image": "shot_3_3.jpg",
+                    "camera_motion": "SLOW_ZOOM_IN"
+                },
+                {
+                    "beat_index": 3,
+                    "start_time": 11.2,
+                    "end_time": 14.40,
+                    "duration": 3.2,
+                    "narration": "Or have we already passed it?",
+                    "image": "shot_3_5.jpg",
+                    "camera_motion": "SLOW_ZOOM_OUT"
+                }
+            ]
+        }
+    ]
+}

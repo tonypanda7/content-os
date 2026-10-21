@@ -1,62 +1,101 @@
 import os
 import sys
 import json
-import asyncio
+import subprocess
 from pathlib import Path
-from openai import OpenAI
-from dotenv import load_dotenv
+from dotenv import load_dotenv, dotenv_values
+from mutagen.mp3 import MP3
 
-# Add project root to python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 from src.models.content import VideoScript
 
 load_dotenv()
 
-# Initialize OpenAI client with DeepInfra endpoint
-client = OpenAI(
-    base_url="https://api.deepinfra.com/v1/openai",
-    api_key=os.getenv("LLM_API_KEY")
-)
+config = dotenv_values(".env")
+API_KEY = config.get("LLM_API_KEY") or os.getenv("LLM_API_KEY")
+TTS_MODEL = config.get("TTS_MODEL") or os.getenv("TTS_MODEL", "Qwen/Qwen3-TTS")
 
-# You will map character names from the script to their respective DeepInfra voice IDs here.
-# To get these IDs, use the curl command: curl -X POST "https://api.deepinfra.com/v1/voices/add" ...
+# Native speaker defaults:
 VOICE_MAP = {
-    "Narrator": os.getenv("NARRATOR_VOICE_ID", "default_narrator_voice_id_here"),
-    "Zeus": os.getenv("ZEUS_VOICE_ID", "default_zeus_voice_id_here"),
-    # Add more characters as needed
+    "Narrator": os.getenv("NARRATOR_VOICE", "Aiden"),
+    "Zeus": os.getenv("ZEUS_VOICE", "Uncle_Fu"),
+    "Chronos": os.getenv("CHRONOS_VOICE", "Dylan"),
 }
 
-def generate_scene_audio(text: str, character_name: str, audio_path: Path) -> float:
+DEFAULT_BASE_PERSONA = (
+    "Warm, resonant male voice speaking at a steady, deliberate pace with grounded depth and natural pauses."
+)
+
+def build_scene_instruct(base_persona: str, scene_instruct: str = None) -> str:
     """
-    Generates audio using DeepInfra's tts-1 model.
+    Blends the overarching anchor persona with scene-level emotional modulation.
+    Ensures the narrator stays 100% consistent across scenes while dynamically adapting tone.
     """
-    voice_id = VOICE_MAP.get(character_name, VOICE_MAP["Narrator"])
+    base = base_persona or DEFAULT_BASE_PERSONA
+    if not scene_instruct:
+        return base
+    base = base.rstrip(".")
+    return f"{base}. Tone: {scene_instruct}"
+
+def generate_scene_audio(text: str, speaker_voice: str, audio_path: Path, instruct: str) -> float:
+    """
+    Generates audio using DeepInfra's Qwen3-TTS with consistent voice anchor and contextual instructions.
+    Uses resilient curl subprocess execution to bypass Python TLS connection resets.
+    Returns the exact duration of the generated MP3 in seconds.
+    """
+    print(f"      [Speaker: {speaker_voice} | Instruct: \"{instruct}\"]")
     
-    print(f"      [Requesting TTS for {character_name} using voice: {voice_id}]")
-    
+    payload = {
+        "model": TTS_MODEL,
+        "voice": speaker_voice,
+        "input": text,
+        "response_format": "mp3"
+    }
+    if instruct:
+        payload["instruct"] = instruct
+
+    import tempfile
+    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as tf:
+        json.dump(payload, tf)
+        tmp_payload = tf.name
+
+    audio_path.parent.mkdir(parents=True, exist_ok=True)
+
+    import time
     try:
-        response = client.audio.speech.create(
-            model="tts-1",
-            voice=voice_id,
-            input=text
-        )
-        
-        # Save the audio file
-        response.stream_to_file(audio_path)
-        
-        # Note: Standard OpenAI TTS endpoints do not return word-level timestamps natively in the same payload.
-        # DeepInfra XTTS may require a different endpoint for word boundaries if needed.
-        # For now, we estimate duration based on file size or fallback to length.
-        # An exact duration calculation will require loading the mp3 (e.g. using mutagen).
-        return len(text) / 15.0 # Rough estimate: 15 characters per second
-        
-    except Exception as e:
-        print(f"      [Error generating audio]: {e}")
+        for attempt in range(1, 6):
+            try:
+                cmd = [
+                    "curl", "-s", "--retry", "5", "--retry-all-errors", "--retry-delay", "1", "--http1.1",
+                    "https://api.deepinfra.com/v1/openai/audio/speech",
+                    "-H", f"Authorization: Bearer {API_KEY}",
+                    "-H", "Content-Type: application/json",
+                    "-d", f"@{tmp_payload}",
+                    "--output", str(audio_path)
+                ]
+                res = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+                if res.returncode == 0 and audio_path.exists() and os.path.getsize(audio_path) > 1000:
+                    audio = MP3(audio_path)
+                    duration = round(audio.info.length, 2)
+                    print(f"      ✅ Generated {audio_path.name} ({duration}s, {os.path.getsize(audio_path)} bytes)")
+                    return duration
+                else:
+                    print(f"      ⚠️ Audio generation curl attempt {attempt} failed (code {res.returncode})")
+                    time.sleep(1.5)
+            except Exception as e:
+                print(f"      ⚠️ Attempt {attempt} error: {e}")
+                time.sleep(1.5)
+
+        print(f"      ❌ Failed to generate {audio_path.name} after 5 attempts")
         return 0.0
+    finally:
+        if os.path.exists(tmp_payload):
+            try: os.unlink(tmp_payload)
+            except Exception: pass
 
 def run_tts_pipeline(script_path: Path, output_dir: Path):
     print("=========================================")
-    print("🎙️ Welcome to the DeepInfra TTS Engine")
+    print(f"🎙️ Qwen 3 TTS Engine ({TTS_MODEL})")
     print("=========================================")
     
     if not script_path.exists():
@@ -69,6 +108,9 @@ def run_tts_pipeline(script_path: Path, output_dir: Path):
     script = VideoScript(**script_data)
     print(f"[TTS Engine]: Loaded script: '{script.title}' with {len(script.scenes)} scenes.")
     
+    base_persona = getattr(script, "base_voice_persona", DEFAULT_BASE_PERSONA)
+    narrator_voice = getattr(script, "narrator_speaker", VOICE_MAP["Narrator"])
+    
     audio_dir = output_dir / "audio"
     audio_dir.mkdir(parents=True, exist_ok=True)
     
@@ -77,26 +119,42 @@ def run_tts_pipeline(script_path: Path, output_dir: Path):
     for i, scene in enumerate(script.scenes):
         scene_num = scene.scene_number
         char_name = getattr(scene, "character_name", "Narrator")
-        print(f"\n[TTS Engine]: Processing Scene {scene_num}/{len(script.scenes)} ({char_name} speaking)...")
+        
+        # Determine speaker
+        if char_name == "Narrator":
+            speaker = getattr(scene, "speaker", narrator_voice) or narrator_voice
+        else:
+            speaker = getattr(scene, "speaker", VOICE_MAP.get(char_name, narrator_voice))
+            
+        scene_instruct = getattr(scene, "voice_instruct", None)
+        full_instruct = build_scene_instruct(base_persona, scene_instruct)
         
         audio_file = audio_dir / f"scene_{scene_num}.mp3"
+        if audio_file.exists() and os.path.getsize(audio_file) > 1000:
+            audio = MP3(audio_file)
+            dur = round(audio.info.length, 2)
+            print(f"\n[Scene {scene_num}/{len(script.scenes)}] Reusing existing {audio_file.name} ({dur}s)")
+        else:
+            print(f"\n[Scene {scene_num}/{len(script.scenes)}] Generating speech for {char_name}...")
+            dur = generate_scene_audio(
+                text=scene.narration,
+                speaker_voice=speaker,
+                audio_path=audio_file,
+                instruct=full_instruct
+            )
+        scene.estimated_duration_seconds = dur
+        total_duration += dur
         
-        # Generate audio using DeepInfra
-        duration = generate_scene_audio(scene.narration, char_name, audio_file)
-        scene.estimated_duration_seconds = round(duration, 2)
-        total_duration += duration
-        
-        print(f"  -> Generated {audio_file.name}")
-        
-    print(f"\n[TTS Engine]: All audio generated! Total video duration estimate: {round(total_duration, 2)} seconds.")
+    print(f"\n🎉 Successfully synthesized all {len(script.scenes)} scenes!")
+    print(f"⏱️ Total Video Audio Duration: {total_duration:.2f}s (~{total_duration/60:.1f} mins)")
     
-    updated_script_path = output_dir / "script_with_audio.json"
-    with open(updated_script_path, "w") as f:
+    # Save the updated script with exact durations
+    output_script = output_dir / "script_with_audio.json"
+    with open(output_script, "w") as f:
         f.write(script.model_dump_json(indent=4))
-        
-    print(f"[TTS Engine]: Updated JSON with durations saved to {updated_script_path}")
+    print(f"📄 Saved updated script with audio timestamps to {output_script}")
 
 if __name__ == "__main__":
-    script_file = Path("data/latest_script.json")
-    out_dir = Path("data")
-    run_tts_pipeline(script_file, out_dir)
+    s_path = Path("data/expressive_script.json")
+    out = Path("data")
+    run_tts_pipeline(s_path, out)
